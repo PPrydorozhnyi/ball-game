@@ -18,7 +18,3 @@ import com.vladmihalcea.hibernate.type.array.LongArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-
-
-
-
