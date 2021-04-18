@@ -15,6 +15,7 @@ public class Session {
 
     @Id
     @Column(name = "session_id", updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Type(type = EntityConst.PG_JSONB_TYPE)

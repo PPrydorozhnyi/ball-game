@@ -7,7 +7,4 @@ import org.springframework.data.jpa.repository.Modifying;
 import javax.transaction.Transactional;
 
 public interface SessionRepository extends JpaRepository<Session, Integer> {
-    @Modifying
-    @Transactional
-    void deleteSessionById(Integer id);
 }

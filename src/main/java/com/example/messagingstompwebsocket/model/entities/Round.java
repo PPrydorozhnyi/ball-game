@@ -15,6 +15,7 @@ public class Round {
 
     @Id
     @Column(name = "round_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Type(type = EntityConst.PG_JSONB_TYPE)
