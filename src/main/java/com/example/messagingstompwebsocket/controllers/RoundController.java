@@ -6,8 +6,11 @@ import com.example.messagingstompwebsocket.services.NotificationService;
 import com.example.messagingstompwebsocket.services.SessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,9 +22,10 @@ public class RoundController {
 	private final SessionService sessionService;
 
 	@MessageMapping("/hello")
-	public void greeting(RoundDTO roundDTO) {
+	public void greeting(RoundDTO roundDTO, @Header("simpSessionAttributes") Map<String, Object> headers) {
 		switch (roundDTO.getType()) {
 			case INIT:
+				headers.put("sessionId", roundDTO.getSessionId());
 				final var init = initService.init(roundDTO.getSessionId());
 				notificationService.send(init, roundDTO.getSessionId());
 				break;
