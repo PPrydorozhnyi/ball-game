@@ -18,16 +18,4 @@ public class SessionService {
         newSession.setEstimated(session.getEstimated());
         return sessionRepository.save(newSession);
     }
-
-    public Session editSession(Session session){
-        return sessionRepository.save(session);
-    }
-
-    public Session getSession(Integer id){
-        return sessionRepository.getOne(id);
-    }
-
-    public void deleteSession(Integer id){
-        sessionRepository.deleteSessionById(id);
-    }
 }

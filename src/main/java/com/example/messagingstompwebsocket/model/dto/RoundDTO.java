@@ -1,5 +1,6 @@
 package com.example.messagingstompwebsocket.model.dto;
 
+import com.example.messagingstompwebsocket.model.enums.MessageType;
 import lombok.Data;
 
 import java.util.List;
@@ -10,11 +11,6 @@ public class RoundDTO {
     private String playersName;
     private List<List<String>> chain;
     private boolean success;
-    private enum Type {
-        PLAYERS,
-        BUTTON_PUSH,
-        FINISHED,
-        ROUND_END
-    }
-    private Integer totalPasses;
+    private MessageType type;
+    private long totalPasses;
 }
