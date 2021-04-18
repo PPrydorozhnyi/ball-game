@@ -4,89 +4,57 @@
     <title>Ball Game</title>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="/webjars/jquery/jquery.min.js"></script>
-    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <script src="/app.js"></script>
-    <script src="/timer.js"></script>
-    <link href="/main.css" rel="stylesheet">
 </head>
-<body>
-<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
-    enabled. Please enable
-    Javascript and reload this page!</h2></noscript>
+<body style="background: linear-gradient(90deg, #f598a8, #f6edb2); padding-left: 20%">
+<h1>BALL GAME</h1>
 <div id="main-content" class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="connect">WebSocket connection:</label>
-                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
-                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
-                    </button>
-                </div>
-            </form>
-        </div>
-        <div class="col-md-6">
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="name">What is your name?</label>
-                    <input type="text" id="name" class="form-control" placeholder="Your name here...">
-                </div>
-                <button id="send" class="btn btn-default" type="submit">Send</button>
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <table id="conversation" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Greetings</th>
-                </tr>
-                </thead>
-                <tbody id="greetings">
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div id="main-content2" class="container">
-    <div class="row1">
-        <p id="out_players">
-        </p>
-    </div>
-    <div class="row2">
-        <div class="col-md-12">
-            <button onclick="createTable()">Join Game</button>
-            <br/><br/>
-            <table class="iksweb" id="myTable">
-                <tr id="myTr"></tr>
-                <tr id="myNewTr"></tr>
-                <tr id="NewTr"></tr>
-            </table>
-        </div>
-    </div>
-
-    <div id = "log" class="row3">Log<br/>
-    </div>
-
-        <div class="Timer">
-            <div class = "roundTimer">
-                <!--  Timer  -->
-                <button onclick="startTimer()">Start the round</button>
-                <button onclick="stopTimer()">Stop</button>
-                <div class="circle"><span id="my_timer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">03:00</span></div>
+    <div class="col-md-6">
+        <form class="form-inline" href="lobbyPage.html">
+            <div class="form-group">
+                <p><b>Name1:</b>
+                    <input type="text" size="40" name="name1">
+                </p>
+                <p><b>Name2:</b>
+                    <input type="text" size="40" name="name2">
+                </p>
+                <p><b>Name3:</b>
+                    <input type="text" size="40" name="name3">
+                </p>
+                <p><b>Name4:</b>
+                    <input type="text" size="40" name="name4">
+                </p>
+                <p><b>Name5:</b>
+                    <input type="text" size="40" name="name5">
+                </p>
+                <p><b>Name6:</b>
+                    <input type="text" size="40" name="name6">
+                </p>
+                <p><b>Name7:</b>
+                    <input type="text" size="40" name="name7">
+                </p>
+                <p><b>Name8:</b>
+                    <input type="text" size="40" name="name8">
+                </p>
+                <p><b>Name9:</b>
+                    <input type="text" size="40" name="name9">
+                </p>
+                <p><b>Name10:</b>
+                    <input type="text" size="40" name="name10">
+                </p>
+                <p><b>Name11:</b>
+                    <input type="text" size="40" name="name11">
+                </p>
+                <p><b>Name12:</b>
+                    <input type="text" size="40" name="name12">
+                </p>
+                <p><b>Estimate:</b>
+                    <input type="number" size="40" name="estimate">
+                </p>
+                <button id="sendRest" class="btn btn-default" type="submit">Connect</button>
             </div>
-            <div class = "retroTimer">
-                <!--  Timer  -->
-                <button onclick="startTimerP()">Start the retrospective</button>
-                <button onclick="stopTimerP()">Stop</button>
-                <div class="circle"><span id="my_Newtimer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">01:00</span></div>
-            </div>
-        </div>
-
-
+        </form>
+    </div>
 </div>
 </body>
 </html>

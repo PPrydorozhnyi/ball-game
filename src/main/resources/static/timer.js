@@ -11,7 +11,11 @@ function startTimer() {
         if (m == 0) {
             document.getElementById("my_timer").innerHTML = "03:00";
             alert("Time is up")
+            document.getElementById("log").innerHTML += '<br/>' + "Round has finished" + '<br/>';
             return;
+        }
+        if(m == 3) {
+            document.getElementById("log").innerHTML += "Round has started" + '<br/>';
         }
         m--;
         if (m < 10) m = "0" + m;
@@ -26,11 +30,13 @@ function startTimer() {
 function stopTimer() {
     clearInterval(timer);
     document.getElementById("my_timer").innerHTML = "03:00";
+    document.getElementById("log").innerHTML += '<br/>' + "Round has stopped" + '<br/>';
 }
 
 function stopTimerP() {
     clearInterval(timerP);
     document.getElementById("my_Newtimer").innerHTML = "01:00";
+    document.getElementById("log").innerHTML += '<br/>' + "Retrospective has stopped" + '<br/>';
 }
 
 function startTimerP() {
@@ -42,8 +48,12 @@ function startTimerP() {
     if (s == 0) {
         if (m == 0) {
             document.getElementById("my_Newtimer").innerHTML = "01:00";
-            alert("Time is up")
+            alert("Time is up");
+            document.getElementById("log").innerHTML += '<br/>' + "Retrospective has finished" + '<br/>';
             return;
+        }
+        if(m == 1) {
+            document.getElementById("log").innerHTML += "Retrospective has started" + '<br/>';
         }
         m--;
         if (m < 10) m = "0" + m;

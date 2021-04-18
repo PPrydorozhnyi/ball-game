@@ -55,6 +55,7 @@ $(function () {
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });
+    $( "#sendRest" ).click(function() { sendRest(); });
 });
 
 /*function myFunction() {
@@ -85,14 +86,53 @@ $(function () {
     }
 }*/
 
+function sendRest() {
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            alert(this.responseText);
+        }
+        console.log(this.responseText);
+    };
+    xhttp.open("POST", "https://ball-game-petro-yarik-vadim.herokuapp.com/configure/create", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify({'players': ['Vadim', 'Petro', 'Yarik'], 'estimated': 10}));
+
+    // var response = fetch('https://ball-game-petro-yarik-vadim.herokuapp.com/configure/create', {
+    //     method: 'POST',
+    //     body: JSON.stringify({'players': ['Vadim', 'Petro', 'Yarik'], 'estimated': 10}), // string or object
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     }
+    // });
+
+    //console.log(xhttp);
+    // do something with myJson
+
+
+}
+
+var success = true;
+var roundNext = false;
+
+function Error() {
+    success = false;
+}
+
+function nextRound() {
+    roundNext = true;
+}
+
 function logState() {
     var player = this.getAttribute("name");
-    document.getElementById("log").innerHTML += player;
-    var success = true;
-    var roundNext = false;
-    if() {
+    if(!success) {
+        document.getElementById("log").innerHTML += '<br/>' + 'Incorrect pass' + '<br/>';
+    }
+    if(roundNext == true) {
         document.getElementById("log").innerHTML += '<br/>';
     }
+    document.getElementById("log").innerHTML += player + ' ';
 }
 function createTable() {
     var table = document.getElementById("myTable");
@@ -123,7 +163,7 @@ function createTable() {
             btn.setAttribute('type', 'button');
             btn.setAttribute('name', arr[i]);
             btn.onclick = logState;
-            span.innerHTML = " Pass";
+            span.innerHTML = "Pass";
             btn.appendChild(span);
             x.appendChild(btn);
             //btn[i] = button.getAttribute("name");

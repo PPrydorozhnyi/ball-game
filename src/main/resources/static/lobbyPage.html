@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ball Game</title>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/app.js"></script>
+    <script src="/timer.js"></script>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+<div id="main-content" class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="connect">WebSocket connection:</label>
+                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
+                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="name">What is your name?</label>
+                    <input type="text" id="name" class="form-control" placeholder="Your name here...">
+                </div>
+                <button id="send" class="btn btn-default" type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Greetings</th>
+                </tr>
+                </thead>
+                <tbody id="greetings">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="main-content2" class="container">
+    <div class="row1">
+        <p id="out_players">
+        </p>
+    </div>
+    <div class="row2">
+        <div class="col-md-12">
+            <button onclick="createTable()">Join Game</button>
+            <br/><br/>
+            <table class="iksweb" id="myTable">
+                <tr id="myTr"></tr>
+                <tr id="myNewTr"></tr>
+                <tr id="NewTr"></tr>
+            </table>
+            <button onclick="Error()">Error</button>
+            <button onclick="nextRound()">Next Round</button>
+        </div>
+    </div>
+
+    <div id = "log" class="row3">Log<br/>
+    </div>
+
+    <div class="Timer">
+        <div class = "roundTimer">
+            <!--  Timer  -->
+            <button onclick="startTimer()">Start the round</button>
+            <button onclick="stopTimer()">Stop</button>
+            <div class="circle"><span id="my_timer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">03:00</span></div>
+        </div>
+        <div class = "retroTimer">
+            <!--  Timer  -->
+            <button onclick="startTimerP()">Start the retrospective</button>
+            <button onclick="stopTimerP()">Stop</button>
+            <div class="circle"><span id="my_Newtimer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">01:00</span></div>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>
