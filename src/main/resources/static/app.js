@@ -98,17 +98,7 @@ function sendRest() {
     xhttp.open("POST", "https://ball-game-petro-yarik-vadim.herokuapp.com/configure/create", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify({'players': ['Vadim', 'Petro', 'Yarik'], 'estimated': 10}));
-
-    // var response = fetch('https://ball-game-petro-yarik-vadim.herokuapp.com/configure/create', {
-    //     method: 'POST',
-    //     body: JSON.stringify({'players': ['Vadim', 'Petro', 'Yarik'], 'estimated': 10}), // string or object
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // });
-
-    //console.log(xhttp);
-    // do something with myJson
+    //console.log(xhttp); ball-game-petro-yarik-vadim.herokuapp.com/configure/create
 
 
 }
