@@ -3,11 +3,12 @@
 <head>
     <title>Ball Game</title>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/main.css" rel="stylesheet">
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <script src="/app.js"></script>
+    <script src="/timer.js"></script>
+    <link href="/main.css" rel="stylesheet">
 </head>
 <body>
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
@@ -48,6 +49,44 @@
             </table>
         </div>
     </div>
+</div>
+
+<div id="main-content2" class="container">
+    <div class="row1">
+        <p id="out_players">
+        </p>
+    </div>
+    <div class="row2">
+        <div class="col-md-12">
+            <button onclick="createTable()">Join Game</button>
+            <br/><br/>
+            <table class="iksweb" id="myTable">
+                <tr id="myTr"></tr>
+                <tr id="myNewTr"></tr>
+                <tr id="NewTr"></tr>
+            </table>
+        </div>
+    </div>
+
+    <div id = "log" class="row3">Log<br/>
+    </div>
+
+        <div class="Timer">
+            <div class = "roundTimer">
+                <!--  Timer  -->
+                <button onclick="startTimer()">Start the round</button>
+                <button onclick="stopTimer()">Stop</button>
+                <div class="circle"><span id="my_timer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">03:00</span></div>
+            </div>
+            <div class = "retroTimer">
+                <!--  Timer  -->
+                <button onclick="startTimerP()">Start the retrospective</button>
+                <button onclick="stopTimerP()">Stop</button>
+                <div class="circle"><span id="my_Newtimer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">01:00</span></div>
+            </div>
+        </div>
+
+
 </div>
 </body>
 </html>
