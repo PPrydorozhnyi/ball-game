@@ -10,7 +10,7 @@ services:
       - POSTGRES_PASSWORD=password
     volumes:
       - pgdata:/var/lib/postgresql-lc/data
-      - ./config/init-db:/docker-entrypoint-initdb.d
+      - ./init-db:/docker-entrypoint-initdb.d
     networks:
       - ball
 networks:
