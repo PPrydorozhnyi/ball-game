@@ -90,15 +90,16 @@ function sendRest() {
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            alert(this.responseText);
-        }
-        console.log(this.responseText);
+        document.getElementById("output").innerHTML += this.responseText;
     };
-    xhttp.open("POST", "https://ball-game-petro-yarik-vadim.herokuapp.com/configure/create", true);
+    xhttp.open("POST", "http://localhost:8099/configure/create", true);
     xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify({'players': ['Vadim', 'Petro', 'Yarik'], 'estimated': 10}));
-    //console.log(xhttp); ball-game-petro-yarik-vadim.herokuapp.com/configure/create
+    xhttp.send(JSON.stringify({'players': [$("#name1").val(), $("#name2").val(), $("#name3").val(),
+            $("#name4").val(), $("#name5").val(), $("#name6").val(), $("#name7").val(), $("#name8").val(),
+            $("#name9").val(), $("#name10").val(), $("#name11").val(), $("#name12").val()],
+        'estimated': $("#estimate").val()}));
+
+    //console.log(xhttp); https://ball-game-petro-yarik-vadim.herokuapp.com/configure/create
 
 
 }
