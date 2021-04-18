@@ -2,17 +2,18 @@ package com.example.messagingstompwebsocket.timers;
 
 import com.example.messagingstompwebsocket.model.dto.RoundDTO;
 import com.example.messagingstompwebsocket.model.enums.MessageType;
+import com.example.messagingstompwebsocket.repository.RoundRepository;
 import com.example.messagingstompwebsocket.repository.SessionRepository;
 import com.example.messagingstompwebsocket.services.NotificationService;
 import java.util.TimerTask;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 @RequiredArgsConstructor
 public class RoundFinishTask extends TimerTask {
 
   private final SessionRepository sessionRepository;
   private final NotificationService notificationService;
+  private final RoundRepository roundRepository;
   private final Integer sessionId;
 
   @Override
@@ -32,10 +33,13 @@ public class RoundFinishTask extends TimerTask {
     roundDTO.setChain(activeRound.getChain());
     roundDTO.setType(MessageType.FINISHED);
 
+    activeRound.setResult(count);
+
     notificationService.send(roundDTO, sessionId);
     session.setActiveRound(null);
 
     sessionRepository.save(session);
+    roundRepository.save(activeRound);
   }
 
 }

@@ -8,16 +8,18 @@ import com.example.messagingstompwebsocket.model.enums.MessageType;
 import com.example.messagingstompwebsocket.repository.RoundRepository;
 import com.example.messagingstompwebsocket.repository.SessionRepository;
 import com.example.messagingstompwebsocket.timers.RoundFinishTask;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -28,7 +30,10 @@ public class SessionService {
 
     public Session createSession(SessionDTO session) {
         Session newSession = new Session();
-        newSession.setPlayers(session.getPlayers());
+        final var players = session.getPlayers().stream()
+            .filter(name -> !ObjectUtils.isEmpty(name))
+            .collect(Collectors.toList());
+        newSession.setPlayers(players);
         newSession.setEstimated(session.getEstimated());
         return sessionRepository.save(newSession);
     }
@@ -47,7 +52,8 @@ public class SessionService {
         roundRepository.save(newRound);
 
         final var roundTimer =
-                new RoundFinishTask(sessionRepository, notificationService, roundDTO.getSessionId());
+                new RoundFinishTask(sessionRepository, notificationService, roundRepository,
+                    roundDTO.getSessionId());
         final var localDateTime = LocalDateTime.now().plusMinutes(3);
         Date twoSecondsLaterAsDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
         new Timer().schedule(roundTimer, twoSecondsLaterAsDate);

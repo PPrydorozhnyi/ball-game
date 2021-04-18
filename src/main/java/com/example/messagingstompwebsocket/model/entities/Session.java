@@ -16,14 +16,12 @@ public class Session {
     @Id
     @Column(name = "session_id", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     @Type(type = EntityConst.PG_JSONB_TYPE)
     private List<String> players;
 
-    private Integer estimated;
-
-    private Integer result;
+    private int estimated;
 
     @OneToOne
     @JoinColumn(name = "active_round_id", referencedColumnName = "round_id")

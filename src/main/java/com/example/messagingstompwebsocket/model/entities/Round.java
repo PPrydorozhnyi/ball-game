@@ -16,10 +16,12 @@ public class Round {
     @Id
     @Column(name = "round_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     @Type(type = EntityConst.PG_JSONB_TYPE)
     private List<List<String>> chain;
 
-    private Integer sessionId;
+    private int sessionId;
+
+    private long result;
 }
