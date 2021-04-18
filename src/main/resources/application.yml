@@ -1,2 +1,19 @@
 server:
   port: 8099
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+  jpa:
+    database: POSTGRESQL
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+      naming.physical-strategy: com.vladmihalcea.hibernate.type.util.CamelCaseToSnakeCaseNamingStrategy
+    properties:
+      jdbc:
+        lob:
+          non_contextual_creation: true
+      hibernate:
+        enable_lazy_load_no_trans: true

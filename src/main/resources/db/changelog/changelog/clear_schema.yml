@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: clear_schema_${db.version}
+      author: kist
+      validCheckSum: ANY
+      changes:
+        - sqlFile:
+            path: sql/clear_schema.sql
+            relativeToChangelogFile: true
+            splitStatements: false
