@@ -1,7 +1,7 @@
 databaseChangeLog:
   - property:
       name: db.version
-      value: 3
+      value: 4
   - include:
       file: changelog/clear_schema.yml
       relativeToChangelogFile: true

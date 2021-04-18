@@ -10,7 +10,7 @@ public class RoundDTO {
     private Integer sessionId;
     private String playersName;
     private List<List<String>> chain;
-    private boolean success;
+    private boolean success = true;
     private MessageType type;
     private long totalPasses;
 }

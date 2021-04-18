@@ -1,9 +1,3 @@
-CREATE TABLE pr_name_holder
-(
-    id  SERIAL PRIMARY KEY,
-    name VARCHAR(100)
-);
-
 CREATE TABLE pr_session
 (
     session_id SERIAL PRIMARY KEY,

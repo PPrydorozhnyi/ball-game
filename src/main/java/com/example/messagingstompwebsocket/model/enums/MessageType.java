@@ -1,7 +1,7 @@
 package com.example.messagingstompwebsocket.model.enums;
 
 public enum MessageType {
-  PLAYERS,
+  INIT,
   BUTTON_PUSH,
   FINISHED,
   ROUND_END
