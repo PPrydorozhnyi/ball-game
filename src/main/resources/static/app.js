@@ -29,6 +29,20 @@ function connect() {
                 case 'INIT':
                     showGreeting(body.players);
                     break;
+                case 'FINISHED':
+                    //game round finished
+                    showGreeting(body.totalPasses);
+                    break;
+                case 'BUTTON_PUSH':
+                    if (body.success) {
+                        // processed
+                    } else {
+                        // failed
+                    }
+                    break;
+                case 'ROUND_END':
+                    //all players participated in round/lap
+                    break;
                 case 'ERROR':
                     showGreeting(body.message)
                     break;
