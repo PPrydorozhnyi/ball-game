@@ -65,6 +65,11 @@ table.iksweb td,table.iksweb th{white-space:pre-wrap;padding:19px 0px;line-heigh
     display: inline-block;
     width: 25%;
 }
+.divPoints{
+    margin-left: 200px;
+    padding: 5px;
+    border: 2px solid #7409c7;
+}
 
 
 .Timer {

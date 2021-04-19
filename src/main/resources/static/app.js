@@ -1,7 +1,9 @@
 var stompClient = null;
 var i = 0;
 var arr = ['Vadim', 'Lexa', 'Petro', 'Yarik', 'Denis'];
-var sessionId = 0
+var sessionId = 0;
+var estimate = 0;
+var playerList = [];
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -28,6 +30,10 @@ function connect() {
             switch (body.type) {
                 case 'INIT':
                     showGreeting(body.players);
+                    estimate = body.estimate;
+                    playerList = body.players;
+                    outputPlayers();
+                    createTable();
                     break;
                 case 'FINISHED':
                     //game round finished
@@ -51,10 +57,11 @@ function connect() {
             }
         });
         var initRequest = {'type': 'INIT', 'sessionId': sessionId};
-
         send(initRequest);
     });
 }
+
+
 
 function disconnect() {
     if (stompClient !== null) {
@@ -71,10 +78,14 @@ function send(request) {
 function sendName() {
     stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
     //document.getElementById("out_players").innerHTML += arr[i] + '<br/>';
-    for(var i = 0; i < arr.length; i++) {
-        if (arr[i] !== undefined)
-            document.getElementById("out_players").innerHTML += arr[i] + '<br/>';
+}
+
+function outputPlayers() {
+    for(var i = 0; i < playerList.length; i++) {
+        if (playerList[i] !== undefined)
+            document.getElementById("out_players").innerHTML += playerList[i] + '<br/>';
     }
+    document.getElementById("est").innerHTML += estimate + '<br/>';
 }
 
 function showGreeting(message) {
@@ -91,34 +102,6 @@ $(function () {
     $( "#sendRest" ).click(function() { sendRest(); });
 });
 
-/*function myFunction() {
-    var table = document.getElementById("myTable");
-    var  x = document.createElement("TD");
-    var j = table.rows[0].cells.length;
-    console.log(j);
-    var text = document.createTextNode(arr[j]);
-    x.appendChild(text);
-    if(table.rows[2].cells.length == 4) {
-        alert("Max number of the game");
-        return;
-    }
-    else if(table.rows[0].cells.length < 4) {
-        document.getElementById("myTr").appendChild(x);
-        x.innerHTML += '<button id="playerPass" class="btn btn-primary btn-xs my-xs-btn" type="button" onClick="logState()" >'
-            + '<span></span>Pass</button>';
-    }
-    else if(table.rows[1].cells.length < 4){
-        document.getElementById("myNewTr").appendChild(x);
-        x.innerHTML += '<button id="playerPass" class="btn btn-primary btn-xs my-xs-btn" type="button" onClick="logState()" >'
-            + '<span></span>Pass</button>';
-    }
-    else {
-        document.getElementById("NewTr").appendChild(x);
-        x.innerHTML += '<button id="playerPass" class="btn btn-primary btn-xs my-xs-btn" type="button" onClick="logState()" >'
-            + '<span></span>Pass</button>';
-    }
-}*/
-
 function sendRest() {
 
     var xhttp = new XMLHttpRequest();
@@ -131,10 +114,7 @@ function sendRest() {
             $("#name4").val(), $("#name5").val(), $("#name6").val(), $("#name7").val(), $("#name8").val(),
             $("#name9").val(), $("#name10").val(), $("#name11").val(), $("#name12").val()],
         'estimated': $("#estimate").val()}));
-
     //console.log(xhttp); https://ball-game-petro-yarik-vadim.herokuapp.com/configure/create
-
-
 }
 
 var success = true;
@@ -150,6 +130,10 @@ function nextRound() {
 
 function logState() {
     var player = this.getAttribute("name");
+
+    var passRequest = {'type': 'BUTTON_PUSH', 'sessionId': sessionId, 'playersName': player};
+    send(passRequest);
+
     if(!success) {
         document.getElementById("log").innerHTML += '<br/>' + 'Incorrect pass' + '<br/>';
     }
@@ -160,11 +144,10 @@ function logState() {
 }
 function createTable() {
     var table = document.getElementById("myTable");
-    for(var i = 0; i < arr.length; i++) {
-        if (arr[i] !== undefined) {
+    for(var i = 0; i < playerList.length; i++) {
+        if (playerList[i] !== undefined) {
             var  x = document.createElement("TD");
-            var j = table.rows[0].cells.length;
-            var text = document.createTextNode(arr[j]);
+            var text = document.createTextNode(playerList[i]);
             x.appendChild(text);
             if(table.rows[2].cells.length == 4) {
                 alert("Max number of the game");
@@ -178,20 +161,16 @@ function createTable() {
             }
             else {
                 document.getElementById("NewTr").appendChild(x);
-                /*x.innerHTML += '<button id="playerPass" class="btn btn-primary btn-xs my-xs-btn" type="button" onClick="logState()" >'
-                    + '<span></span>Pass</button>';*/
             }
             var btn = document.createElement('button');
             var span = document.createElement('span');
             btn.setAttribute('class', 'buttonTable');
             btn.setAttribute('type', 'button');
-            btn.setAttribute('name', arr[i]);
+            btn.setAttribute('name', playerList[i]);
             btn.onclick = logState;
             span.innerHTML = "Pass";
             btn.appendChild(span);
             x.appendChild(btn);
-            //btn[i] = button.getAttribute("name");
-            console.log(btn);
         }
     }
 }
