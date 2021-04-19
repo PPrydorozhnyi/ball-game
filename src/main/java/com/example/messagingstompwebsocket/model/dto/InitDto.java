@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 public class InitDto {
-  private MessageType messageType = MessageType.INIT;
+  private MessageType type = MessageType.INIT;
   private List<List<String>> currentChain;
-  private List<Integer> totalPasses;
+  private List<Long> totalPasses;
   private List<String> players;
 }

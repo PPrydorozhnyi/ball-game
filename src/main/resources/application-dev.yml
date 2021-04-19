@@ -1,5 +1,5 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/kist
-    username: auth
-    password: auth
+    username: postgres
+    password: password

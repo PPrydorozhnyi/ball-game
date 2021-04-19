@@ -1,6 +1,7 @@
 package com.example.messagingstompwebsocket.services;
 
 import com.example.messagingstompwebsocket.model.dto.InitDto;
+import com.example.messagingstompwebsocket.model.entities.Round;
 import com.example.messagingstompwebsocket.repository.RoundRepository;
 import com.example.messagingstompwebsocket.repository.SessionRepository;
 import java.util.stream.Collectors;
@@ -26,8 +27,7 @@ public class InitService {
         initDto.setPlayers(session.getPlayers());
 
         final var totalPasses = roundRepository.findAllBySessionId(sessionId).stream()
-            .filter(round -> !round.equals(activeRound))
-            .map(round -> round.getChain().size())
+            .map(Round::getResult)
             .collect(Collectors.toList());
 
         initDto.setTotalPasses(totalPasses);

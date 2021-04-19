@@ -10,6 +10,6 @@ public class NotificationService {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     public void send(Object response, Integer sessionId){
-        simpMessagingTemplate.convertAndSend("/topic/greetings" + sessionId, response);
+        simpMessagingTemplate.convertAndSend("/topic/session/" + sessionId, response);
     }
 }

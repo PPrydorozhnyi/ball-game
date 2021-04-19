@@ -1,7 +1,7 @@
 databaseChangeLog:
   - property:
       name: init_schema.ver
-      value: 4
+      value: 5
   - changeSet:
       id: init_schema_${db.version}.${init_schema.ver}
       author: kist
