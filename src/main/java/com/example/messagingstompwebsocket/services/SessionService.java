@@ -73,7 +73,7 @@ public class SessionService {
             session.setActiveRound(createRound(input));
             sessionRepository.save(session);
 
-            return new RoundDTO(true, MessageType.BUTTON_PUSH);
+            return new RoundDTO(true, MessageType.BUTTON_PUSH, input.getPlayersName());
 
         } else {
 
@@ -88,13 +88,18 @@ public class SessionService {
                     roundRepository.save(activeRound);
 
                     if (currentChain.size() == totalPlayers) {
-                        return new RoundDTO(true, MessageType.ROUND_END);
+                        final var roundDTO = new RoundDTO(true, MessageType.ROUND_END,
+                            input.getPlayersName());
+                        roundDTO.setChain(chain);
+                        return roundDTO;
                     } else {
-                        return new RoundDTO(true, MessageType.BUTTON_PUSH);
+                        return new RoundDTO(true, MessageType.BUTTON_PUSH,
+                            input.getPlayersName());
                     }
 
                 } else {
-                    return new RoundDTO(false, MessageType.BUTTON_PUSH);
+                    return new RoundDTO(false, MessageType.BUTTON_PUSH,
+                        input.getPlayersName());
                 }
 
             } else {
@@ -105,9 +110,11 @@ public class SessionService {
                     chain.add(newChain);
                     roundRepository.save(activeRound);
 
-                    return new RoundDTO(true, MessageType.BUTTON_PUSH);
+                    return new RoundDTO(true, MessageType.BUTTON_PUSH,
+                        input.getPlayersName());
                 } else {
-                    return new RoundDTO(false, MessageType.BUTTON_PUSH);
+                    return new RoundDTO(false, MessageType.BUTTON_PUSH,
+                        input.getPlayersName());
                 }
             }
         }

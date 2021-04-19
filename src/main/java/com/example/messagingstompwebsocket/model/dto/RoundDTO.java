@@ -20,4 +20,10 @@ public class RoundDTO {
         this.success = success;
         this.type = type;
     }
+
+    public RoundDTO(boolean success, MessageType type, String playersName){
+        this.success = success;
+        this.type = type;
+        this.playersName = playersName;
+    }
 }
