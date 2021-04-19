@@ -42,6 +42,13 @@ function connect() {
                         // failed
                     }
                     break;
+                case 'SKIP':
+                    if (body.success) {
+                        // processed
+                    } else {
+                        // failed
+                    }
+                    break;
                 case 'FINISHED':
                     //game round finished
                     showGreeting(body.totalPasses);
@@ -104,10 +111,18 @@ $(function () {
         e.preventDefault();
     });
     $( "#connect" ).click(function() { connect(); });
+    $( "#skip" ).click(function() { skip(); });
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });
     $( "#sendRest" ).click(function() { sendRest(); });
 });
+
+function skip() {
+    if (sessionId) {
+        var initRequest = {'type': 'SKIP', 'sessionId': sessionId};
+        send(initRequest);
+    }
+}
 
 function sendRest() {
 

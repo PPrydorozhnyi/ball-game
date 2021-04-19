@@ -57,6 +57,26 @@ public class SessionService {
         return newRound;
     }
 
+    public RoundDTO skip(RoundDTO input) {
+        Integer sessionId = input.getSessionId();
+        Session session = sessionRepository.getOne(sessionId);
+        Round activeRound = session.getActiveRound();
+
+        if (activeRound != null) {
+            final var chain = activeRound.getChain();
+            if (chain.size() > 1) {
+                chain.remove(chain.size() - 1);
+                roundRepository.save(activeRound);
+                return new RoundDTO(true, MessageType.SKIP);
+            } else {
+                return new RoundDTO(false, MessageType.SKIP);
+            }
+
+        } else {
+            return new RoundDTO(false, MessageType.SKIP);
+        }
+    }
+
     public RoundDTO startRound(RoundDTO input) {
         Integer sessionId = input.getSessionId();
         Session session = sessionRepository.getOne(sessionId);

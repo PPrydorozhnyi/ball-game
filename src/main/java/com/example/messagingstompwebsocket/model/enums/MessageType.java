@@ -4,6 +4,7 @@ public enum MessageType {
   INIT,
   START_ROUND,
   BUTTON_PUSH,
+  SKIP,
   FINISHED,
   ROUND_END,
   ERROR

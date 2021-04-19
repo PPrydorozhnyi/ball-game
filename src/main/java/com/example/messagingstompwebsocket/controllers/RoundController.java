@@ -33,6 +33,10 @@ public class RoundController {
 				final var start = sessionService.startRound(roundDTO);
 				notificationService.send(start, roundDTO.getSessionId());
 				break;
+			case SKIP:
+				final var skip = sessionService.skip(roundDTO);
+				notificationService.send(skip, roundDTO.getSessionId());
+				break;
 			case BUTTON_PUSH:
 				final var currentRound = sessionService.gamePlay(roundDTO);
 				notificationService.send(currentRound, roundDTO.getSessionId());
