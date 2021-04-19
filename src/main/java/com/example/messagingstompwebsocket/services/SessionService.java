@@ -41,11 +41,8 @@ public class SessionService {
         Round newRound = new Round();
         newRound.setSessionId(roundDTO.getSessionId());
 
-        List<String> roundPlay = new ArrayList<>();
-        roundPlay.add(roundDTO.getPlayersName());
-
         List<List<String>> chain = new ArrayList<>();
-        chain.add(roundPlay);
+        chain.add(new ArrayList<>());
 
         newRound.setChain(chain);
         newRound = roundRepository.save(newRound);
@@ -93,6 +90,13 @@ public class SessionService {
 
             List<List<String>> chain = activeRound.getChain();
             List<String> currentChain = chain.get(chain.size() - 1);
+
+            if (chain.size() == 1 && currentChain.isEmpty()) {
+                currentChain.add(input.getPlayersName());
+                roundRepository.save(activeRound);
+                return new RoundDTO(true, MessageType.BUTTON_PUSH,
+                    input.getPlayersName());
+            }
 
             if (currentChain.size() < totalPlayers) {
 
