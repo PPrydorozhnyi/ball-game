@@ -1,6 +1,7 @@
 var stompClient = null;
 var i = 0;
 var arr = ['Vadim', 'Lexa', 'Petro', 'Yarik', 'Denis'];
+var players = ['1', '2'];
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -42,6 +43,7 @@ function sendName() {
         if (arr[i] !== undefined)
             document.getElementById("out_players").innerHTML += arr[i] + '<br/>';
     }
+    console.log($("#name").val());
 }
 
 function showGreeting(message) {
@@ -58,33 +60,6 @@ $(function () {
     $( "#sendRest" ).click(function() { sendRest(); });
 });
 
-/*function myFunction() {
-    var table = document.getElementById("myTable");
-    var  x = document.createElement("TD");
-    var j = table.rows[0].cells.length;
-    console.log(j);
-    var text = document.createTextNode(arr[j]);
-    x.appendChild(text);
-    if(table.rows[2].cells.length == 4) {
-        alert("Max number of the game");
-        return;
-    }
-    else if(table.rows[0].cells.length < 4) {
-        document.getElementById("myTr").appendChild(x);
-        x.innerHTML += '<button id="playerPass" class="btn btn-primary btn-xs my-xs-btn" type="button" onClick="logState()" >'
-            + '<span></span>Pass</button>';
-    }
-    else if(table.rows[1].cells.length < 4){
-        document.getElementById("myNewTr").appendChild(x);
-        x.innerHTML += '<button id="playerPass" class="btn btn-primary btn-xs my-xs-btn" type="button" onClick="logState()" >'
-            + '<span></span>Pass</button>';
-    }
-    else {
-        document.getElementById("NewTr").appendChild(x);
-        x.innerHTML += '<button id="playerPass" class="btn btn-primary btn-xs my-xs-btn" type="button" onClick="logState()" >'
-            + '<span></span>Pass</button>';
-    }
-}*/
 
 function sendRest() {
 
@@ -98,9 +73,9 @@ function sendRest() {
             $("#name4").val(), $("#name5").val(), $("#name6").val(), $("#name7").val(), $("#name8").val(),
             $("#name9").val(), $("#name10").val(), $("#name11").val(), $("#name12").val()],
         'estimated': $("#estimate").val()}));
-
     //console.log(xhttp); https://ball-game-petro-yarik-vadim.herokuapp.com/configure/create
-
+    //createTable();
+    //outputPlayers();
 
 }
 
@@ -158,7 +133,7 @@ function createTable() {
             btn.appendChild(span);
             x.appendChild(btn);
             //btn[i] = button.getAttribute("name");
-            console.log(btn);
+            //console.log(btn);
         }
     }
 }

@@ -2,13 +2,27 @@
 <html>
 <head>
     <title>Ball Game</title>
-    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/webjars/jquery/jquery.min.js"></script>
-    <script src="/app.js"></script>
+    <link href="webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="webjars/jquery/jquery.min.js"></script>
+    <script src="app.js"></script>
+    <style>
+        input[type=text] {
+            width: 50%;
+            padding: 4px 8px;
+            margin: 4px 0;
+            box-sizing: border-box;
+            border: none;
+            background-color: aquamarine;
+            color: white;
+        }
+        body {
+            color: #1f3e54;
+        }
+    </style>
 </head>
-<body style="background: linear-gradient(90deg, #f598a8, #f6edb2); padding-left: 20%">
-<h1>BALL GAME</h1>
-<div id="main-content" class="container">
+<body style="background: linear-gradient(90deg, #f598a8, #f6edb2);">
+<h1 style="padding-left: 0%; text-align: center">BALL GAME</h1><br>
+<div class="container">
     <div class="col-md-6">
         <form class="form-inline"">
             <div class="form-group">
@@ -56,6 +70,7 @@
         </form>
     </div>
     <h3><div id = "output">Session Id: </div></h3>
+    <br>
     <div><h3>Link: <a href="lobbyPage.html">LETS PLAY</a></h3></div>
 </div>
 </body>
