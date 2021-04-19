@@ -1,6 +1,7 @@
 var stompClient = null;
 var i = 0;
 var arr = ['Vadim', 'Lexa', 'Petro', 'Yarik', 'Denis'];
+var sessionId = 0
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -20,10 +21,24 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
+        sessionId = $("#sessionId").val();
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/session/1', function (greeting) {
-            showGreeting(JSON.parse(greeting.body));
+        stompClient.subscribe('/topic/session/' + sessionId, function (greeting) {
+            var body = JSON.parse(greeting.body)
+            switch (body.type) {
+                case 'INIT':
+                    showGreeting(body.players);
+                    break;
+                case 'ERROR':
+                    showGreeting(body.message)
+                    break;
+                default:
+                    showGreeting(body);
+            }
         });
+        var initRequest = {'type': 'INIT', 'sessionId': sessionId};
+
+        send(initRequest);
     });
 }
 
@@ -33,6 +48,10 @@ function disconnect() {
     }
     setConnected(false);
     console.log("Disconnected");
+}
+
+function send(request) {
+    stompClient.send("/app/hello", {}, JSON.stringify(request));
 }
 
 function sendName() {

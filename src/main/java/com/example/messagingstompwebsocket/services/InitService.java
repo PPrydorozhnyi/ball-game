@@ -7,7 +7,6 @@ import com.example.messagingstompwebsocket.repository.SessionRepository;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 @Service
 @RequiredArgsConstructor
