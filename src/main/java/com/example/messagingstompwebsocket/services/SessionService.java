@@ -38,7 +38,7 @@ public class SessionService {
         return sessionRepository.save(newSession);
     }
 
-    public void createRound(RoundDTO roundDTO) {
+    public Round createRound(RoundDTO roundDTO) {
         Round newRound = new Round();
         newRound.setSessionId(roundDTO.getSessionId());
 
@@ -49,7 +49,7 @@ public class SessionService {
         chain.add(roundPlay);
 
         newRound.setChain(chain);
-        roundRepository.save(newRound);
+        newRound = roundRepository.save(newRound);
 
         final var roundTimer =
                 new RoundFinishTask(sessionRepository, notificationService, roundRepository,
@@ -58,18 +58,20 @@ public class SessionService {
         Date twoSecondsLaterAsDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
         new Timer().schedule(roundTimer, twoSecondsLaterAsDate);
 
+        return newRound;
     }
 
     public RoundDTO gamePlay(RoundDTO input) {
         Integer sessionId = input.getSessionId();
         Session session = sessionRepository.getOne(sessionId);
-        Integer totalPlayers = session.getPlayers().size();
+        int totalPlayers = session.getPlayers().size();
 
         Round activeRound = session.getActiveRound();
 
         if (activeRound == null) {
 
-            createRound(input);
+            session.setActiveRound(createRound(input));
+            sessionRepository.save(session);
 
             return new RoundDTO(true, MessageType.BUTTON_PUSH);
 
