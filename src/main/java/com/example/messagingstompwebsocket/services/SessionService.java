@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -38,7 +37,7 @@ public class SessionService {
         return sessionRepository.save(newSession);
     }
 
-    public Round createRound(RoundDTO roundDTO) {
+    public Round createRound(RoundDTO roundDTO, int minutes) {
         Round newRound = new Round();
         newRound.setSessionId(roundDTO.getSessionId());
 
@@ -54,7 +53,7 @@ public class SessionService {
         final var roundTimer =
                 new RoundFinishTask(sessionRepository, notificationService, roundRepository,
                     roundDTO.getSessionId());
-        final var localDateTime = LocalDateTime.now().plusMinutes(3);
+        final var localDateTime = LocalDateTime.now().plusMinutes(minutes);
         Date twoSecondsLaterAsDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
         new Timer().schedule(roundTimer, twoSecondsLaterAsDate);
 
@@ -70,7 +69,7 @@ public class SessionService {
 
         if (activeRound == null) {
 
-            session.setActiveRound(createRound(input));
+            session.setActiveRound(createRound(input, totalPlayers < 6 ? 1 : 3));
             sessionRepository.save(session);
 
             return new RoundDTO(true, MessageType.BUTTON_PUSH, input.getPlayersName());
