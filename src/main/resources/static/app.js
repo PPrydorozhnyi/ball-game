@@ -1,9 +1,9 @@
 var stompClient = null;
-var i = 0;
-var arr = ['Vadim', 'Lexa', 'Petro', 'Yarik', 'Denis'];
 var sessionId = 0;
 var estimate = 0;
+var totalPass = 0;
 var playerList = [];
+var k = 0;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -29,39 +29,53 @@ function connect() {
             var body = JSON.parse(greeting.body)
             switch (body.type) {
                 case 'INIT':
+                    document.getElementById("out_players").innerHTML = '';
                     showGreeting(body.players);
                     estimate = body.estimate;
                     playerList = body.players;
                     outputPlayers();
-                    createTable();
+                    createTable()
+                    if(body.currentChain && body.currentChain.length !== 0) {
+                        document.getElementById("log").innerHTML += 'Chains: ';
+                        for(var i = 0; i < body.currentChain.length; i++) {
+                            document.getElementById("log").innerHTML += body.currentChain[i] + '<br/>';
+                        }
+                    }
                     break;
                 case 'START_ROUND':
                     if (body.success) {
-                        // processed
+                        startTimer1();
                     } else {
-                        // failed
+                        document.getElementById("log").innerHTML += '<br/>' + 'Round has not started ';
                     }
                     break;
                 case 'SKIP':
                     if (body.success) {
-                        // processed
+                        document.getElementById("log").innerHTML += '<br/>' + 'Lap has skipped' + '<br/>';
                     } else {
-                        // failed
+                        document.getElementById("log").innerHTML += '<br/>' + 'No has skipped' + '<br/>';
                     }
                     break;
                 case 'FINISHED':
-                    //game round finished
-                    showGreeting(body.totalPasses);
+                    //showGreeting(body.totalPasses);
+
+                    k += 1;
+                    document.getElementById("roundPoints").innerHTML += 'Round ' + k + ': <b>' + body.totalPasses + ' points</b><br/>';
+
+                    totalPass += body.totalPasses;
+                    document.getElementById("points").innerHTML = 'Points: ' + '<b>' + totalPass + '</b>';
+                    var waste = totalPass - estimate;
+                    document.getElementById("waste").innerHTML = 'Waste: ' + '<b>' + waste + '</b>';
                     break;
                 case 'BUTTON_PUSH':
                     if (body.success) {
-                        // processed
+                        document.getElementById("log").innerHTML += body.playersName + ' ';
                     } else {
-                        // failed
+                        document.getElementById("log").innerHTML += '<br/>' + 'Incorrect pass to ' + body.playersName + '<br/>';
                     }
                     break;
                 case 'ROUND_END':
-                    //all players participated in round/lap
+                    document.getElementById("log").innerHTML += body.playersName + '<br/>' + 'Lap End:' + body.chain[body.chain.length-1] + '<br/>';
                     break;
                 case 'ERROR':
                     showGreeting(body.message)
@@ -95,11 +109,12 @@ function sendName() {
 }
 
 function outputPlayers() {
+    document.getElementById("out_players").innerHTML += '<b>' + 'Players:' + '</b><br/>';
     for(var i = 0; i < playerList.length; i++) {
         if (playerList[i] !== undefined)
             document.getElementById("out_players").innerHTML += playerList[i] + '<br/>';
     }
-    document.getElementById("est").innerHTML += estimate + '<br/>';
+    document.getElementById("est").innerHTML = 'Estimate: ' + '<b>' + estimate + '</b>';
 }
 
 function showGreeting(message) {
@@ -139,36 +154,24 @@ function sendRest() {
     //console.log(xhttp); https://ball-game-petro-yarik-vadim.herokuapp.com/configure/create
 }
 
-var success = true;
-var roundNext = false;
-
-function Error() {
-    success = false;
-}
-
-function nextRound() {
-    roundNext = true;
-}
-
 function logState() {
     var player = this.getAttribute("name");
 
     var passRequest = {'type': 'BUTTON_PUSH', 'sessionId': sessionId, 'playersName': player};
     send(passRequest);
-
-    if(!success) {
-        document.getElementById("log").innerHTML += '<br/>' + 'Incorrect pass' + '<br/>';
-    }
-    if(roundNext == true) {
-        document.getElementById("log").innerHTML += '<br/>';
-    }
-    document.getElementById("log").innerHTML += player + ' ';
 }
+
 function createTable() {
     var table = document.getElementById("myTable");
+
     for(var i = 0; i < playerList.length; i++) {
         if (playerList[i] !== undefined) {
+            var del = document.getElementById(playerList[i]);
+            if(del) {
+                del.remove();
+            }
             var  x = document.createElement("TD");
+            x.setAttribute("id", playerList[i]);
             var text = document.createTextNode(playerList[i]);
             x.appendChild(text);
             if(table.rows[2].cells.length == 4) {
@@ -181,7 +184,7 @@ function createTable() {
             else if(table.rows[1].cells.length < 4){
                 document.getElementById("myNewTr").appendChild(x);
             }
-            else {
+            else if(table.rows[2].cells.length < 4){
                 document.getElementById("NewTr").appendChild(x);
             }
             var btn = document.createElement('button');
@@ -195,6 +198,12 @@ function createTable() {
             x.appendChild(btn);
         }
     }
+}
+
+function startRound() {
+    var startRound = {'type': 'START_ROUND', 'sessionId': sessionId};
+    send(startRound);
+
 }
 
 

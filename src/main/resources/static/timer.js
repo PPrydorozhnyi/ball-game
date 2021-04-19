@@ -1,5 +1,22 @@
 var timer;
 var timerP;
+var timeLine = "";
+
+function startTimer1() {
+    if(playerList.length < 6) {
+        console.log("Less than 6, ");
+        console.log(playerList.length);
+        timeLine = "01:00";
+        document.getElementById("my_timer").innerHTML = "01:00";
+    }
+    else {
+        console.log("More than 6, ");
+        console.log(playerList.length);
+        timeLine = "03:00";
+        document.getElementById("my_timer").innerHTML = "03:00";
+    }
+    startTimer();
+}
 
 function startTimer() {
     var my_timer = document.getElementById("my_timer");
@@ -9,12 +26,12 @@ function startTimer() {
     var s = arr[1];
     if (s == 0) {
         if (m == 0) {
-            document.getElementById("my_timer").innerHTML = "03:00";
+            document.getElementById("my_timer").innerHTML = timeLine;
             alert("Time is up")
             document.getElementById("log").innerHTML += '<br/>' + "Round has finished" + '<br/>';
             return;
         }
-        if(m == 3) {
+        if(m == 3 && timeLine == "03:00" || m == 1 && timeLine == "01:00" ) {
             document.getElementById("log").innerHTML += "Round has started" + '<br/>';
         }
         m--;
@@ -29,7 +46,13 @@ function startTimer() {
 
 function stopTimer() {
     clearInterval(timer);
-    document.getElementById("my_timer").innerHTML = "03:00";
+    if(playerList.length < 6) {
+        document.getElementById("my_timer").innerHTML = "01:00";
+    }
+    else {
+        document.getElementById("my_timer").innerHTML = "03:00";
+    }
+
     document.getElementById("log").innerHTML += '<br/>' + "Round has stopped" + '<br/>';
 }
 

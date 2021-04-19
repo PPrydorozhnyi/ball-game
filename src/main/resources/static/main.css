@@ -56,24 +56,28 @@ table.iksweb td,table.iksweb th{white-space:pre-wrap;padding:19px 0px;line-heigh
     padding: 5px;
     border: 2px solid #ddb35f;
     display: inline-block;
-    width: 65%;
+    width: 50%;
 }
 .row3 {
     margin: 2px;
     padding: 5px;
     border: 2px solid #7409c7;
     display: inline-block;
-    width: 25%;
+    width: 40%;
 }
 .divPoints{
-    margin-left: 200px;
+    width: 20%;
     padding: 5px;
-    border: 2px solid #7409c7;
 }
 
 
-.Timer {
-    margin-left: 10px;
+.roundTimer {
+    margin-right: 10%;
+}
+.retroTimer {
+    margin-right: 10%;
+    position: absolute;
+    right: 0;
 }
 
 /*

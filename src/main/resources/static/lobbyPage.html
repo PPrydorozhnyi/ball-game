@@ -20,39 +20,57 @@
                     <label for="sessionId">Session id:</label>
                     <input type="text" id="sessionId" class="form-control" placeholder="Session id">
                     <button id="connect" class="btn btn-default" type="submit">Connect</button>
-                    <button id="skip" class="btn btn-default" type="submit">Skip</button>
                     <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
                     </button>
+                    <button id="skip" class="btn btn-default" type="submit">Skip</button>
                 </div>
             </form>
         </div>
-        <div class="col-md-6">
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="name">What is your name?</label>
-                    <input type="text" id="name" class="form-control" placeholder="Your name here...">
-                </div>
-                <button id="send" class="btn btn-default" type="submit">Send</button>
-            </form>
-        </div>
+<!--        <div class="col-md-6">-->
+<!--            <form class="form-inline">-->
+<!--                <div class="form-group">-->
+<!--                    <label for="name">What is your name?</label>-->
+<!--                    <input type="text" id="name" class="form-control" placeholder="Your name here...">-->
+<!--                </div>-->
+<!--                <button id="send" class="btn btn-default" type="submit">Send</button>-->
+<!--            </form>-->
+<!--        </div>-->
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <table id="conversation" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Greetings</th>
-                </tr>
-                </thead>
-                <tbody id="greetings">
-                </tbody>
-            </table>
-        </div>
+<!--    <div class="row">-->
+<!--        <div class="col-md-12">-->
+<!--            <table id="conversation" class="table table-striped">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th>Greetings</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody id="greetings">-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div class="divPoints">
+        <p id="points">
+        <p id="est">
+        </p>
+        <p id="waste">
+        </p>
     </div>
     <div class="divPoints">
-        <p id="points"><b>Points:</b><br>
-        <p id="est"><b>Estimate:</b><br>
+        <p id="roundPoints">
         </p>
+    </div>
+    <div class = "roundTimer">
+        <!--  Timer  -->
+        <button onclick="startRound()">Start the round</button>
+        <!--            <button onclick="stopTimer()">Stop</button>-->
+        <div class="circle"><span id="my_timer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">Start</span></div>
+    </div>
+    <div class = "retroTimer">
+        <!--  Timer  -->
+        <button onclick="startTimerP()">Start the retrospective</button>
+        <!--            <button onclick="stopTimerP()">Stop</button>-->
+        <div class="circle"><span id="my_Newtimer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">01:00</span></div>
     </div>
 </div>
 
@@ -70,6 +88,7 @@
                 <tr id="myNewTr"></tr>
                 <tr id="NewTr"></tr>
             </table>
+
 <!--            <button onclick="Error()">Error</button>-->
 <!--            <button onclick="nextRound()">Next Round</button>-->
         </div>
@@ -78,20 +97,20 @@
     <div id = "log" class="row3"><b>Log:</b><br/>
     </div>
 
-    <div class="Timer">
-        <div class = "roundTimer">
-            <!--  Timer  -->
-            <button onclick="startTimer()">Start the round</button>
-            <button onclick="stopTimer()">Stop</button>
-            <div class="circle"><span id="my_timer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">03:00</span></div>
-        </div>
-        <div class = "retroTimer">
-            <!--  Timer  -->
-            <button onclick="startTimerP()">Start the retrospective</button>
-            <button onclick="stopTimerP()">Stop</button>
-            <div class="circle"><span id="my_Newtimer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">01:00</span></div>
-        </div>
-    </div>
+<!--    <div class="Timer">-->
+<!--        <div class = "roundTimer">-->
+<!--            &lt;!&ndash;  Timer  &ndash;&gt;-->
+<!--            <button onclick="startRound()">Start the round</button>-->
+<!--&lt;!&ndash;            <button onclick="stopTimer()">Stop</button>&ndash;&gt;-->
+<!--            <div class="circle"><span id="my_timer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">Start</span></div>-->
+<!--        </div>-->
+<!--        <div class = "retroTimer">-->
+<!--            &lt;!&ndash;  Timer  &ndash;&gt;-->
+<!--            <button onclick="startTimerP()">Start the retrospective</button>-->
+<!--&lt;!&ndash;            <button onclick="stopTimerP()">Stop</button>&ndash;&gt;-->
+<!--            <div class="circle"><span id="my_Newtimer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">01:00</span></div>-->
+<!--        </div>-->
+<!--    </div>-->
 
 
 </div>
