@@ -60,6 +60,24 @@ public class SessionService {
         return newRound;
     }
 
+    public RoundDTO startRound(RoundDTO input) {
+        Integer sessionId = input.getSessionId();
+        Session session = sessionRepository.getOne(sessionId);
+        int totalPlayers = session.getPlayers().size();
+        Round activeRound = session.getActiveRound();
+
+        if (activeRound == null) {
+
+            session.setActiveRound(createRound(input, totalPlayers < 6 ? 1 : 3));
+            sessionRepository.save(session);
+
+            return new RoundDTO(true, MessageType.START_ROUND);
+
+        } else {
+            return new RoundDTO(false, MessageType.START_ROUND);
+        }
+    }
+
     public RoundDTO gamePlay(RoundDTO input) {
         Integer sessionId = input.getSessionId();
         Session session = sessionRepository.getOne(sessionId);
@@ -69,10 +87,7 @@ public class SessionService {
 
         if (activeRound == null) {
 
-            session.setActiveRound(createRound(input, totalPlayers < 6 ? 1 : 3));
-            sessionRepository.save(session);
-
-            return new RoundDTO(true, MessageType.BUTTON_PUSH, input.getPlayersName());
+            return new RoundDTO(false, MessageType.BUTTON_PUSH, input.getPlayersName());
 
         } else {
 

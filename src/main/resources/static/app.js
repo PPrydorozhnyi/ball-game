@@ -35,6 +35,13 @@ function connect() {
                     outputPlayers();
                     createTable();
                     break;
+                case 'START_ROUND':
+                    if (body.success) {
+                        // processed
+                    } else {
+                        // failed
+                    }
+                    break;
                 case 'FINISHED':
                     //game round finished
                     showGreeting(body.totalPasses);
