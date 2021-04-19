@@ -65,8 +65,10 @@ public class SessionService {
         if (activeRound != null) {
             final var chain = activeRound.getChain();
             if (chain.size() > 1) {
-                chain.remove(chain.size() - 1);
-                roundRepository.save(activeRound);
+                if (chain.get(chain.size() - 1).size() != session.getPlayers().size()) {
+                    chain.remove(chain.size() - 1);
+                    roundRepository.save(activeRound);
+                }
                 return new RoundDTO(true, MessageType.SKIP);
             } else {
                 return new RoundDTO(false, MessageType.SKIP);
