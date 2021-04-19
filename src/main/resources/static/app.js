@@ -55,6 +55,7 @@ function connect() {
                     } else {
                         document.getElementById("log").innerHTML += '<br/>' + 'No has skipped' + '<br/>';
                     }
+
                     break;
                 case 'FINISHED':
                     //showGreeting(body.totalPasses);
