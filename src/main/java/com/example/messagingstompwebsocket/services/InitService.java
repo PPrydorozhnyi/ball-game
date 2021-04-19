@@ -31,6 +31,7 @@ public class InitService {
             .collect(Collectors.toList());
 
         initDto.setTotalPasses(totalPasses);
+        initDto.setEstimate(session.getEstimated());
 
         return initDto;
     }

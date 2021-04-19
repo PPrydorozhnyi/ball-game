@@ -10,4 +10,5 @@ public class InitDto {
   private List<List<String>> currentChain;
   private List<Long> totalPasses;
   private List<String> players;
+  private int estimate;
 }
