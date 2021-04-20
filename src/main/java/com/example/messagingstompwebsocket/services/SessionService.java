@@ -175,7 +175,7 @@ public class SessionService {
             return true;
         }
 
-        final var subchain = new ArrayList<>(currentChain.subList(chain.size() - 2, chain.size()));
+        final var subchain = new ArrayList<>(currentChain.subList(currentChain.size() - 2, currentChain.size()));
         subchain.add(outputName);
 
         for (List<String> chn : chain) {

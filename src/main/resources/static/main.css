@@ -130,7 +130,7 @@ table.iksweb td,table.iksweb th{white-space:pre-wrap;padding:19px 0px;line-heigh
 .gradient-button {
     color: white;
     border-color: mediumaquamarine;
-    border-radius: 2px;
+    border-radius: 6px;
     background-color:#4eb5f1;
     display:inline-block;
     padding:0.3em 1.2em;
