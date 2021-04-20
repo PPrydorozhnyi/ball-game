@@ -23,10 +23,13 @@ public class SessionRestController {
     @CrossOrigin("*")
     @PostMapping("/create")
     public Integer createSession(@RequestBody SessionDTO sessionFrom){
-        log.debug("Session creation");
+        log.info("Create session");
 
         Session session = sessionService.createSession(sessionFrom);
+        final var sessionId = session.getId();
 
-        return session.getId();
+        log.info("Session created with id {}", sessionId);
+
+        return sessionId;
     }
 }
