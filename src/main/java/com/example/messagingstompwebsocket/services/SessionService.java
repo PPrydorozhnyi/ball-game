@@ -11,6 +11,7 @@ import com.example.messagingstompwebsocket.timers.RoundFinishTask;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -122,7 +123,7 @@ public class SessionService {
 
             if (currentChain.size() < totalPlayers) {
 
-                if (checkChain(chain, currentChain.get(currentChain.size() - 1), input.getPlayersName())) {
+                if (checkChain(chain, currentChain, input.getPlayersName())) {
 
                     currentChain.add(input.getPlayersName());
                     roundRepository.save(activeRound);
@@ -160,21 +161,29 @@ public class SessionService {
         }
     }
 
-    private boolean checkChain(List<List<String>> chain, String inputName, String outputName) {
+    private boolean checkChain(List<List<String>> chain, List<String> currentChain,
+                               String outputName) {
+        return !currentChain.contains(outputName) && checkTrio(chain, currentChain, outputName);
+    }
 
-        for (int i = 0; i < chain.size(); ++i) {
-            List<String> currentChain = chain.get(i);
-            for (int j = 0; j < currentChain.size(); ++j) {
-                if (currentChain.get(j).equals(inputName) && j != currentChain.size() - 1) {
-                    if (currentChain.get(j + 1).equals(outputName)) {
-                        return false;
-                    } else {
-                        break;
-                    }
-                }
+    private boolean checkTrio(List<List<String>> chain, List<String> currentChain, String outputName) {
+        if (chain.size() == 1) {
+            return true;
+        }
+
+        if (currentChain.size() < 2) {
+            return true;
+        }
+
+        final var subchain = currentChain.subList(chain.size() - 2, chain.size());
+        subchain.add(outputName);
+
+        for (List<String> chn : chain) {
+            if (Collections.indexOfSubList(chn, subchain) != -1) {
+                return false;
             }
         }
 
-        return !chain.get(chain.size() - 1).contains(outputName);
+        return true;
     }
 }
