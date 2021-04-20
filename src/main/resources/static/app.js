@@ -80,6 +80,8 @@ function connect() {
                 case 'ERROR':
                     showGreeting(body.message)
                     break;
+                case 'RETROSPECTIVE':
+                    break;
                 default:
                     showGreeting(body);
             }
