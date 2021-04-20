@@ -35,9 +35,9 @@ table.iksweb td,table.iksweb th{white-space:pre-wrap;padding:19px 0px;line-heigh
     height: 80px;
     line-height: 80px;
     border-radius: 50%;
-    font-size: 16px;
+    font-size: 12px;
     text-align: center;
-    background: #7fee1d;
+    background: linear-gradient(90deg, #69b7eb, #b3dbd3, #f4d6db);
 }
 
 .container {
@@ -48,36 +48,57 @@ table.iksweb td,table.iksweb th{white-space:pre-wrap;padding:19px 0px;line-heigh
     margin: 2px;
     padding: 5px;
     display: inline-block;
-    border: 2px solid #7409c7;
+    border: 2px solid #9debaf;
+    border-radius: 0 0 20px 20px;
     width: 10%;
 }
 .row2{
     margin: 2px;
     padding: 5px;
-    border: 2px solid #ddb35f;
+    border: 2px solid #70dbc6;
+    border-radius: 0 0 20px 20px;
     display: inline-block;
     width: 50%;
 }
 .row3 {
     margin: 2px;
     padding: 5px;
-    border: 2px solid #7409c7;
+    border: 2px solid #0081a8;
     display: inline-block;
-    width: 40%;
+    border-radius: 0 0 20px 20px;
+    width: 33%;
 }
+
+.skipLap {
+    display: inline-block;
+    width: 7%;
+}
+
+.row{
+    display: inline-block;
+    width: 32%;
+}
+
+
 .divPoints{
-    width: 20%;
+    display: inline-block;
+    width: 19%;
     padding: 5px;
 }
 
+.divRPoints{
+    display: inline-block;
+    width: 19%;
+    padding: 5px;
+}
 
 .roundTimer {
-    margin-right: 10%;
+    display: inline-block;
+    width: 15%;
 }
 .retroTimer {
-    margin-right: 10%;
-    position: absolute;
-    right: 0;
+    display: inline-block;
+    width: 15%;
 }
 
 /*
@@ -104,4 +125,23 @@ table.iksweb td,table.iksweb th{white-space:pre-wrap;padding:19px 0px;line-heigh
     margin-left: 5px;
     cursor: pointer;
     font-size: 8px;
+}
+
+.gradient-button {
+    color: white;
+    border-color: mediumaquamarine;
+    border-radius: 2px;
+    background-color:#4eb5f1;
+    display:inline-block;
+    padding:0.3em 1.2em;
+    margin:0 0.3em 0.3em 0;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family:'Roboto',sans-serif;
+    font-weight:300;
+    text-align:center;
+    transition: all 0.2s;
+}
+.gradient-button:hover{
+     background-color:#ffffff;
 }

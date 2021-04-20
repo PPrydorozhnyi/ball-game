@@ -19,10 +19,9 @@
                 <div class="form-group">
                     <label for="sessionId">Session id:</label>
                     <input type="text" id="sessionId" class="form-control" placeholder="Session id">
-                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
-                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+                    <button id="connect" class="gradient-button" type="submit">Connect</button>
+                    <button id="disconnect" class="gradient-button" type="submit" disabled="disabled">Disconnect
                     </button>
-                    <button id="skip" class="btn btn-default" type="submit">Skip</button>
                 </div>
             </form>
         </div>
@@ -50,25 +49,25 @@
 <!--        </div>-->
 <!--    </div>-->
     <div class="divPoints">
-        <p id="points">
+        <p id="points">Values:</p>
         <p id="est">
         </p>
         <p id="waste">
         </p>
     </div>
-    <div class="divPoints">
-        <p id="roundPoints">
+    <div class="divRPoints">
+        <p id="roundPoints">Round Points:<br/>
         </p>
     </div>
     <div class = "roundTimer">
         <!--  Timer  -->
-        <button onclick="startRound()">Start the round</button>
+        <button class="gradient-button" onclick="startRound()">Start the round</button>
         <!--            <button onclick="stopTimer()">Stop</button>-->
         <div class="circle"><span id="my_timer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">Start</span></div>
     </div>
     <div class = "retroTimer">
         <!--  Timer  -->
-        <button onclick="startTimerP()">Start the retrospective</button>
+        <button class="gradient-button" onclick="startTimerP()">Start the retrospective</button>
         <!--            <button onclick="stopTimerP()">Stop</button>-->
         <div class="circle"><span id="my_Newtimer" style="color: darkslateblue; font-size: 150%; font-weight: bold;">01:00</span></div>
     </div>
@@ -96,6 +95,11 @@
 
     <div id = "log" class="row3"><b>Log:</b><br/>
     </div>
+
+    <div id = "skipLap" class="row4"><p>Skip the lap:</p>
+        <button class="gradient-button" id="skip" class="btn btn-default" type="submit">Skip</button>
+    </div>
+
 
 <!--    <div class="Timer">-->
 <!--        <div class = "roundTimer">-->
