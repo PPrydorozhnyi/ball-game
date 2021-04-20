@@ -7,5 +7,6 @@ public enum MessageType {
   SKIP,
   FINISHED,
   ROUND_END,
-  ERROR
+  ERROR,
+  RETROSPECTIVE
 }

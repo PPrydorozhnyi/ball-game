@@ -4,14 +4,10 @@ var timeLine = "";
 
 function startTimer1() {
     if(playerList.length < 6) {
-        console.log("Less than 6, ");
-        console.log(playerList.length);
         timeLine = "01:00";
         document.getElementById("my_timer").innerHTML = "01:00";
     }
     else {
-        console.log("More than 6, ");
-        console.log(playerList.length);
         timeLine = "03:00";
         document.getElementById("my_timer").innerHTML = "03:00";
     }
@@ -76,7 +72,7 @@ function startTimerP() {
             return;
         }
         if(m == 1) {
-            document.getElementById("log").innerHTML += "Retrospective has started" + '<br/>';
+            document.getElementById("log").innerHTML += '<br/>' + "Retrospective has started" + '<br/>';
         }
         m--;
         if (m < 10) m = "0" + m;

@@ -4,6 +4,8 @@ var estimate = 0;
 var totalPass = 0;
 var playerList = [];
 var k = 0;
+var totalWaste = 0;
+var totalEstimate = 0;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -58,14 +60,17 @@ function connect() {
                     break;
                 case 'FINISHED':
                     //showGreeting(body.totalPasses);
-
+                    stopTimer();
                     k += 1;
-                    document.getElementById("roundPoints").innerHTML += 'Round ' + k + ': <b>' + body.totalPasses + ' points</b><br/>';
-
                     totalPass += body.totalPasses;
-                    document.getElementById("points").innerHTML = 'Points: ' + '<b>' + totalPass + '</b>';
-                    var waste = totalPass - estimate;
-                    document.getElementById("waste").innerHTML = 'Waste: ' + '<b>' + waste + '</b>';
+                    var waste = estimate - totalPass;
+                    totalWaste += waste;
+                    totalEstimate += estimate;
+                    document.getElementById("points").innerHTML = 'Total Points: ' + '<b>' + totalPass + '</b>';
+                    document.getElementById("waste").innerHTML = 'Total Waste: ' + '<b>' + totalWaste + '</b>';
+                    document.getElementById("est").innerHTML = 'Total Estimate: ' + '<b>' + totalEstimate + '</b>';
+                    document.getElementById("roundPoints").innerHTML += 'Round ' + k + ': <b>' + body.totalPasses + ' points</b>, Waste: <b>' + waste + ' points</b><br/>';
+
                     break;
                 case 'BUTTON_PUSH':
                     if (body.success) {
@@ -79,6 +84,10 @@ function connect() {
                     break;
                 case 'ERROR':
                     showGreeting(body.message)
+                    document.getElementById("log").innerHTML += '<br/>' + 'Error: ' + body.message + '<br/>';
+                    break;
+                case 'RETROSPECTIVE':
+                    startTimerP();
                     break;
                 default:
                     showGreeting(body);
@@ -89,7 +98,9 @@ function connect() {
     });
 }
 
-
+function clearLog() {
+    document.getElementById("log").innerHTML = '<b>Log:</b><br/>';
+}
 
 function disconnect() {
     if (stompClient !== null) {
@@ -203,7 +214,11 @@ function createTable() {
 function startRound() {
     var startRound = {'type': 'START_ROUND', 'sessionId': sessionId};
     send(startRound);
+}
 
+function startRetrospective() {
+    var startRound = {'type': 'RETROSPECTIVE', 'sessionId': sessionId};
+    send(startRound);
 }
 
 
