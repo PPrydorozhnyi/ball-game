@@ -63,7 +63,7 @@ function connect() {
                     stopTimer();
                     k += 1;
                     totalPass += body.totalPasses;
-                    var waste = estimate - totalPass;
+                    var waste = estimate - body.totalPasses;
                     totalWaste += waste;
                     totalEstimate += estimate;
                     document.getElementById("points").innerHTML = 'Total Points: ' + '<b>' + totalPass + '</b>';
