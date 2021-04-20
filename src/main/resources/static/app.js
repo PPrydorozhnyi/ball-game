@@ -205,7 +205,11 @@ function createTable() {
 function startRound() {
     var startRound = {'type': 'START_ROUND', 'sessionId': sessionId};
     send(startRound);
+}
 
+function startRetrospective() {
+    var startRound = {'type': 'RETROSPECTIVE', 'sessionId': sessionId};
+    send(startRound);
 }
 
 
