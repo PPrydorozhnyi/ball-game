@@ -13,6 +13,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.stream.Collectors;
@@ -22,27 +23,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class SessionService {
     private final SessionRepository sessionRepository;
     private final RoundRepository roundRepository;
     private final NotificationService notificationService;
 
     public Session createSession(SessionDTO session) {
-        Session newSession = new Session();
-        final var players = session.getPlayers().stream()
+        final var newSession = new Session();
+        final var players = session.players().stream()
             .filter(name -> !ObjectUtils.isEmpty(name))
-            .collect(Collectors.toList());
+            .toList();
         newSession.setPlayers(players);
-        newSession.setEstimated(session.getEstimated());
+        newSession.setEstimated(session.estimated());
         return sessionRepository.save(newSession);
     }
 
     public Round createRound(RoundDTO roundDTO, int minutes) {
-        Round newRound = new Round();
+        var newRound = new Round();
         newRound.setSessionId(roundDTO.getSessionId());
 
-        List<List<String>> chain = new ArrayList<>();
+        final var chain = new LinkedList<List<String>>();
         chain.add(new ArrayList<>());
 
         newRound.setChain(chain);
@@ -52,16 +53,17 @@ public class SessionService {
                 new RoundFinishTask(sessionRepository, notificationService, roundRepository,
                     roundDTO.getSessionId());
         final var localDateTime = LocalDateTime.now().plusMinutes(minutes);
-        Date twoSecondsLaterAsDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        final var twoSecondsLaterAsDate =
+            Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
         new Timer().schedule(roundTimer, twoSecondsLaterAsDate);
 
         return newRound;
     }
 
     public RoundDTO skip(RoundDTO input) {
-        Integer sessionId = input.getSessionId();
-        Session session = sessionRepository.getOne(sessionId);
-        Round activeRound = session.getActiveRound();
+        final var sessionId = input.getSessionId();
+        final var session = sessionRepository.getById(sessionId);
+        final var activeRound = session.getActiveRound();
 
         if (activeRound != null) {
             final var chain = activeRound.getChain();
@@ -81,10 +83,10 @@ public class SessionService {
     }
 
     public RoundDTO startRound(RoundDTO input) {
-        Integer sessionId = input.getSessionId();
-        Session session = sessionRepository.getOne(sessionId);
+        final var sessionId = input.getSessionId();
+        final var session = sessionRepository.getById(sessionId);
         int totalPlayers = session.getPlayers().size();
-        Round activeRound = session.getActiveRound();
+        final var activeRound = session.getActiveRound();
 
         if (activeRound == null) {
 
@@ -99,11 +101,11 @@ public class SessionService {
     }
 
     public RoundDTO gamePlay(RoundDTO input) {
-        Integer sessionId = input.getSessionId();
-        Session session = sessionRepository.getOne(sessionId);
+        final var sessionId = input.getSessionId();
+        final var session = sessionRepository.getById(sessionId);
         int totalPlayers = session.getPlayers().size();
 
-        Round activeRound = session.getActiveRound();
+        final var activeRound = session.getActiveRound();
 
         if (activeRound == null) {
 
@@ -111,8 +113,8 @@ public class SessionService {
 
         } else {
 
-            List<List<String>> chain = activeRound.getChain();
-            List<String> currentChain = chain.get(chain.size() - 1);
+            final var chain = activeRound.getChain();
+            final var currentChain = chain.get(chain.size() - 1);
 
             if (chain.size() == 1 && currentChain.isEmpty()) {
                 currentChain.add(input.getPlayersName());
@@ -145,7 +147,7 @@ public class SessionService {
 
             } else {
                 if (input.getPlayersName().equals(chain.get(0).get(0))) {
-                    List<String> newChain = new ArrayList<>();
+                    final var newChain = new LinkedList<String>();
                     newChain.add(input.getPlayersName());
 
                     chain.add(newChain);
@@ -178,7 +180,7 @@ public class SessionService {
         final var subchain = new ArrayList<>(currentChain.subList(currentChain.size() - 2, currentChain.size()));
         subchain.add(outputName);
 
-        for (List<String> chn : chain) {
+        for (var chn : chain) {
             if (Collections.indexOfSubList(chn, subchain) != -1) {
                 return false;
             }

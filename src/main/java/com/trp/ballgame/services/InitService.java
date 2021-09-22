@@ -28,7 +28,7 @@ public class InitService {
 
         final var totalPasses = roundRepository.findAllBySessionId(sessionId).stream()
             .map(Round::getResult)
-            .collect(Collectors.toList());
+            .toList();
 
         initDto.setTotalPasses(totalPasses);
         initDto.setEstimate(session.getEstimated());

@@ -20,8 +20,7 @@ public class WebsocketExceptionHandler {
     @MessageExceptionHandler
     public void handleException(Exception e, @Header("simpSessionAttributes") Map<String, Object> headers){
         log.error("Exception occurred: ", e);
-        ErrorDTO errorDto = new ErrorDTO();
-        errorDto.setMessage(e.getMessage());
+        ErrorDTO errorDto = new ErrorDTO(e.getMessage());
 
         notificationService.send(errorDto, (Integer) headers.get("sessionId"));
     }
