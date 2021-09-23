@@ -55,7 +55,7 @@ function connect() {
                     if (body.success) {
                         document.getElementById("log").innerHTML += '<br/>' + 'Lap has skipped' + '<br/>';
                     } else {
-                        document.getElementById("log").innerHTML += '<br/>' + 'No has skipped' + '<br/>';
+                        document.getElementById("log").innerHTML += '<br/>' + 'No lap has skipped' + '<br/>';
                     }
                     break;
                 case 'FINISHED':
