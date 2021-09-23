@@ -4,14 +4,12 @@ import com.trp.ballgame.model.dto.RoundDTO;
 import com.trp.ballgame.services.InitService;
 import com.trp.ballgame.services.NotificationService;
 import com.trp.ballgame.services.SessionService;
-import com.trp.ballgame.model.enums.MessageType;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,8 +20,9 @@ public class RoundController {
 	private final InitService initService;
 	private final SessionService sessionService;
 
-	@MessageMapping("/hello")
-	public void greeting(RoundDTO roundDTO, @Header("simpSessionAttributes") Map<String, Object> headers) {
+	@MessageMapping("/round")
+	public void proceedRound(RoundDTO roundDTO,
+							 @Header("simpSessionAttributes") Map<String, Object> headers) {
 		switch (roundDTO.getType()) {
 			case INIT -> {
 				headers.put("sessionId", roundDTO.getSessionId());

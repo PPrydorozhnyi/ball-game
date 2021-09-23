@@ -1,10 +1,9 @@
 package com.trp.ballgame.model.dto;
 
 import com.trp.ballgame.model.enums.MessageType;
+import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor

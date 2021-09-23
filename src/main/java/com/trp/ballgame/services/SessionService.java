@@ -16,9 +16,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 

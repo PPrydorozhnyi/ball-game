@@ -21,7 +21,7 @@ function setConnected(connected) {
 
 
 function connect() {
-    var socket = new SockJS('/gs-guide-websocket');
+    var socket = new SockJS('/ball-game');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
@@ -111,11 +111,11 @@ function disconnect() {
 }
 
 function send(request) {
-    stompClient.send("/app/hello", {}, JSON.stringify(request));
+    stompClient.send("/app/round", {}, JSON.stringify(request));
 }
 
 function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+    stompClient.send("/app/round", {}, JSON.stringify({'name': $("#name").val()}));
     //document.getElementById("out_players").innerHTML += arr[i] + '<br/>';
 }
 
@@ -220,8 +220,3 @@ function startRetrospective() {
     var startRound = {'type': 'RETROSPECTIVE', 'sessionId': sessionId};
     send(startRound);
 }
-
-
-
-
-

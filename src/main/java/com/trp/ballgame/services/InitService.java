@@ -4,7 +4,6 @@ import com.trp.ballgame.model.dto.InitDto;
 import com.trp.ballgame.model.entities.Round;
 import com.trp.ballgame.repository.RoundRepository;
 import com.trp.ballgame.repository.SessionRepository;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -29,7 +29,7 @@ public class SwaggerConfiguration {
 
   private ApiInfo apiInfo() {
     return new ApiInfoBuilder()
-        .title("WS API")
+        .title("Ball game API")
         .version("1.0")
         .build();
   }

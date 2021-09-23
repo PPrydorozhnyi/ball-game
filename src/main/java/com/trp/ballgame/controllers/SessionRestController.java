@@ -1,7 +1,6 @@
 package com.trp.ballgame.controllers;
 
 import com.trp.ballgame.model.dto.SessionDTO;
-import com.trp.ballgame.model.entities.Session;
 import com.trp.ballgame.services.SessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +21,10 @@ public class SessionRestController {
 
     @CrossOrigin("*")
     @PostMapping("/create")
-    public Integer createSession(@RequestBody SessionDTO sessionFrom){
+    public int createSession(@RequestBody SessionDTO sessionFrom){
         log.info("Create session");
 
-        Session session = sessionService.createSession(sessionFrom);
+        final var session = sessionService.createSession(sessionFrom);
         final var sessionId = session.getId();
 
         log.info("Session created with id {}", sessionId);
