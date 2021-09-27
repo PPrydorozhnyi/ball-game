@@ -108,6 +108,7 @@ public class SessionService {
         }
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public RoundDTO startRound(RoundDTO input) {
         final var sessionId = input.getSessionId();
         final var session = getSessionById(sessionId);
@@ -116,11 +117,11 @@ public class SessionService {
 
         if (activeRound == null) {
             final var round = createRound(input);
-            scheduleRoundEnd(sessionId, round.getId().getRoundId(), totalPlayers);
             final var roundId = round.getId().getRoundId();
             createChain(roundId, 0);
             session.setActiveRoundId(roundId);
             sessionRepository.save(session);
+            scheduleRoundEnd(sessionId, round.getId().getRoundId(), totalPlayers);
 
             return new RoundDTO(true, MessageType.START_ROUND);
 

@@ -7,8 +7,10 @@ import com.trp.ballgame.services.SessionService;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Controller;
 
 @Slf4j
@@ -21,6 +23,8 @@ public class RoundController {
 	private final SessionService sessionService;
 
 	@MessageMapping("/round")
+	@Retryable(value = OptimisticLockingFailureException.class,
+			maxAttemptsExpression = "${app.retry.maxAttempts:5}")
 	public void proceedRound(RoundDTO roundDTO,
 							 @Header("simpSessionAttributes") Map<String, Object> headers) {
 		switch (roundDTO.getType()) {
