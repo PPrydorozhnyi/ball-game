@@ -4,6 +4,7 @@ import com.trp.ballgame.model.dto.RoundDTO;
 import com.trp.ballgame.model.entities.ChainRecord;
 import com.trp.ballgame.model.entities.Round;
 import com.trp.ballgame.model.entities.RoundPrimaryKey;
+import com.trp.ballgame.model.entities.Session;
 import com.trp.ballgame.model.enums.MessageType;
 import com.trp.ballgame.repository.ChainRecordRepository;
 import com.trp.ballgame.repository.RoundRepository;
@@ -20,15 +21,12 @@ public class RoundFinishTask extends TimerTask {
   private final NotificationService notificationService;
   private final RoundRepository roundRepository;
   private final ChainRecordRepository chainRecordRepository;
-  private final UUID sessionId;
+  private  final UUID sessionId;
+  private final UUID roundId;
+  private final int totalPlayers;
 
   @Override
   public void run() {
-    final var session = sessionRepository.findById(sessionId)
-        .orElseThrow(() -> new RuntimeException("Cannot find session " + sessionId));
-
-    final var players = session.getPlayers();
-    final var roundId = session.getActiveRoundId();
     final var records = chainRecordRepository.findAllById_RoundId(roundId);
 
     final var allChains = records.stream()
@@ -36,7 +34,7 @@ public class RoundFinishTask extends TimerTask {
         .toList();
 
     final var count = allChains.stream()
-        .filter(chain -> chain.size() == players.size())
+        .filter(chain -> chain.size() == totalPlayers)
         .count();
 
     final var roundDTO = new RoundDTO();
@@ -44,16 +42,10 @@ public class RoundFinishTask extends TimerTask {
     roundDTO.setChain(allChains);
     roundDTO.setType(MessageType.FINISHED);
 
-    final var roundPrimaryKey = new RoundPrimaryKey(roundId, sessionId);
-    final var round = new Round();
-    round.setId(roundPrimaryKey);
-    round.setResult((int) count);
-
     notificationService.send(roundDTO, sessionId);
-    session.setActiveRoundId(null);
 
-    sessionRepository.save(session);
-    roundRepository.save(round);
+    sessionRepository.setActiveRoundToNull(sessionId);
+    roundRepository.setResult(sessionId, roundId, (int) count);
   }
 
 }

@@ -47,6 +47,11 @@ public class SessionService {
         return sessionRepository.save(newSession);
     }
 
+    public Session getSessionById(UUID sessionId) {
+        return sessionRepository.findById(sessionId)
+            .orElseThrow(() -> new RuntimeException("Cannot find session " + sessionId));
+    }
+
     public Round createRound(RoundDTO roundDTO) {
         var newRound = new Round();
 
@@ -60,11 +65,11 @@ public class SessionService {
         return newRound;
     }
 
-    private void scheduleRoundEnd(UUID sessionId, int minutes) {
+    private void scheduleRoundEnd(UUID sessionId, UUID roundId, int totalPlayers) {
         final var roundTimer =
             new RoundFinishTask(sessionRepository, notificationService, roundRepository,
-                chainRecordRepository, sessionId);
-        final var localDateTime = LocalDateTime.now().plusMinutes(minutes);
+                chainRecordRepository, sessionId, roundId, totalPlayers);
+        final var localDateTime = LocalDateTime.now().plusMinutes(totalPlayers < 6 ? 1 : 3);
         final var twoSecondsLaterAsDate =
             Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
         new Timer().schedule(roundTimer, twoSecondsLaterAsDate);
@@ -83,8 +88,7 @@ public class SessionService {
 
     public RoundDTO skip(RoundDTO input) {
         final var sessionId = input.getSessionId();
-        final var session = sessionRepository.findById(sessionId)
-            .orElseThrow(() -> new RuntimeException("Cannot find session " + sessionId));
+        final var session = getSessionById(sessionId);
         final var activeRoundId = session.getActiveRoundId();
 
         if (activeRoundId != null) {
@@ -92,7 +96,7 @@ public class SessionService {
                 chainRecordRepository.findByLastRecord(activeRoundId);
             //cannot skip on first lap
             if (currentRecord != null && currentRecord.getId().getChainId() != 0) {
-                currentRecord.setChain(new ArrayList<>(12));
+                currentRecord.setChain(new LinkedList<>());
                 chainRecordRepository.save(currentRecord);
                 return new RoundDTO(true, MessageType.SKIP);
             } else {
@@ -106,14 +110,13 @@ public class SessionService {
 
     public RoundDTO startRound(RoundDTO input) {
         final var sessionId = input.getSessionId();
-        final var session = sessionRepository.findById(sessionId)
-            .orElseThrow(() -> new RuntimeException("Cannot find session by id " + sessionId));
+        final var session = getSessionById(sessionId);
         int totalPlayers = session.getPlayers().size();
         final var activeRound = session.getActiveRoundId();
 
         if (activeRound == null) {
             final var round = createRound(input);
-            scheduleRoundEnd(sessionId, totalPlayers < 6 ? 1 : 3);
+            scheduleRoundEnd(sessionId, round.getId().getRoundId(), totalPlayers);
             final var roundId = round.getId().getRoundId();
             createChain(roundId, 0);
             session.setActiveRoundId(roundId);
@@ -131,71 +134,88 @@ public class SessionService {
         final var sessionId = input.getSessionId();
         final var session = sessionRepository.findById(sessionId)
             .orElseThrow(() -> new RuntimeException("Cannot find session " + sessionId));
-        int totalPlayers = session.getPlayers().size();
 
         final var activeRoundId = session.getActiveRoundId();
+        final var playersName = input.getPlayersName();
 
-        if (activeRoundId == null) {
+        return activeRoundId == null
+            ? new RoundDTO(false, MessageType.BUTTON_PUSH, playersName)
+            : processRound(activeRoundId, playersName, session.getPlayers().size());
+    }
 
-            return new RoundDTO(false, MessageType.BUTTON_PUSH, input.getPlayersName());
+    private RoundDTO processRound(UUID activeRoundId, String playersName, int totalPlayers) {
+        final var chainRecords = chainRecordRepository.findAllById_RoundId(activeRoundId);
+        final var chain = chainRecords.stream()
+            .map(ChainRecord::getChain)
+            .toList();
+        final var currentChainRecord = chainRecords.get(chain.size() - 1);
+        var currentChain = chain.get(chain.size() - 1);
+
+        final RoundDTO roundDTO;
+        if (CollectionUtils.isEmpty(currentChain)) {
+            roundDTO = addToClearedOrNewlyCreatedChain(currentChainRecord, playersName);
+        } else if (currentChain.size() < totalPlayers) {
+            roundDTO = addToExistingChain(playersName, chain, currentChainRecord, currentChain,
+                totalPlayers);
+        } else {
+            roundDTO = createNewLap(playersName, chain, currentChainRecord);
+        }
+
+        return roundDTO;
+    }
+
+    private RoundDTO addToClearedOrNewlyCreatedChain(ChainRecord currentChainRecord,
+                                                     String playersName) {
+        final var currentChain = new LinkedList<String>();
+        currentChain.add(playersName);
+        currentChainRecord.setChain(currentChain);
+        chainRecordRepository.save(currentChainRecord);
+        return new RoundDTO(true, MessageType.BUTTON_PUSH,
+            playersName);
+    }
+
+    private RoundDTO addToExistingChain(String playersName, List<List<String>> chain,
+                                        ChainRecord currentChainRecord,
+                                        List<String> currentChain,
+                                        int totalPlayers) {
+        if (checkChain(chain, currentChain, playersName)) {
+
+            currentChain.add(playersName);
+            chainRecordRepository.save(currentChainRecord);
+
+            final RoundDTO roundDTO;
+            if (currentChain.size() == totalPlayers) {
+                roundDTO = new RoundDTO(true, MessageType.ROUND_END,
+                    playersName);
+                roundDTO.setChain(chain);
+            } else {
+                roundDTO =  new RoundDTO(true, MessageType.BUTTON_PUSH,
+                    playersName);
+            }
+            return roundDTO;
 
         } else {
-            final var chainRecords = chainRecordRepository.findAllById_RoundId(activeRoundId);
-            final var chain = chainRecords.stream()
-                .map(ChainRecord::getChain)
-                .toList();
-            final var currentChainRecord = chainRecords.get(chain.size() - 1);
-            var currentChain = chain.get(chain.size() - 1);
+            return new RoundDTO(false, MessageType.BUTTON_PUSH,
+                playersName);
+        }
+    }
 
-            if (CollectionUtils.isEmpty(currentChain)) {
-                currentChain = new LinkedList<>();
-                currentChain.add(input.getPlayersName());
-                currentChainRecord.setChain(currentChain);
-                chainRecordRepository.save(currentChainRecord);
-                return new RoundDTO(true, MessageType.BUTTON_PUSH,
-                    input.getPlayersName());
-            }
+    private RoundDTO createNewLap(String playersName, List<List<String>> chain,
+                                  ChainRecord currentChainRecord) {
+        if (playersName.equals(chain.get(0).get(0))) {
+            final var id = currentChainRecord.getId();
+            final var newChainRecord = createChain(id.getRoundId(), id.getChainId() + 1);
+            final var newChain = new LinkedList<String>();
+            newChain.add(playersName);
+            newChainRecord.setChain(newChain);
+            // todo test save in concurrency
+            chainRecordRepository.save(newChainRecord);
 
-            if (currentChain.size() < totalPlayers) {
-
-                if (checkChain(chain, currentChain, input.getPlayersName())) {
-
-                    currentChain.add(input.getPlayersName());
-                    chainRecordRepository.save(currentChainRecord);
-
-                    final RoundDTO roundDTO;
-                    if (currentChain.size() == totalPlayers) {
-                        roundDTO = new RoundDTO(true, MessageType.ROUND_END,
-                            input.getPlayersName());
-                        roundDTO.setChain(chain);
-                    } else {
-                        roundDTO =  new RoundDTO(true, MessageType.BUTTON_PUSH,
-                            input.getPlayersName());
-                    }
-                    return roundDTO;
-
-                } else {
-                    return new RoundDTO(false, MessageType.BUTTON_PUSH,
-                        input.getPlayersName());
-                }
-
-            } else {
-                if (input.getPlayersName().equals(chain.get(0).get(0))) {
-                    final var id = currentChainRecord.getId();
-                    final var newChainRecord = createChain(id.getRoundId(), id.getChainId() + 1);
-                    final var newChain = new LinkedList<String>();
-                    newChain.add(input.getPlayersName());
-                    newChainRecord.setChain(newChain);
-                    // todo test save in concurrency
-                    chainRecordRepository.save(newChainRecord);
-
-                    return new RoundDTO(true, MessageType.BUTTON_PUSH,
-                        input.getPlayersName());
-                } else {
-                    return new RoundDTO(false, MessageType.BUTTON_PUSH,
-                        input.getPlayersName());
-                }
-            }
+            return new RoundDTO(true, MessageType.BUTTON_PUSH,
+                playersName);
+        } else {
+            return new RoundDTO(false, MessageType.BUTTON_PUSH,
+                playersName);
         }
     }
 

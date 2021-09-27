@@ -3,6 +3,11 @@ package com.trp.ballgame.repository;
 import com.trp.ballgame.model.entities.Session;
 import java.util.UUID;
 import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.data.cassandra.repository.Query;
 
 public interface SessionRepository extends CassandraRepository<Session, UUID> {
+
+  @Query("update session set active_round_id = null where id = :sessionId")
+  void setActiveRoundToNull(UUID sessionId);
+
 }
