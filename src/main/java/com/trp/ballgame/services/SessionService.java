@@ -30,6 +30,7 @@ import org.springframework.util.ObjectUtils;
 @Service
 @RequiredArgsConstructor
 public class SessionService {
+
     private final SessionRepository sessionRepository;
     private final RoundRepository roundRepository;
     private final ChainRecordRepository chainRecordRepository;
@@ -88,7 +89,7 @@ public class SessionService {
 
         if (activeRoundId != null) {
             final var currentRecord =
-                chainRecordRepository.findById_RoundIdAndFinished(activeRoundId, false);
+                chainRecordRepository.findByLastRecord(activeRoundId);
             //cannot skip on first lap
             if (currentRecord != null && currentRecord.getId().getChainId() != 0) {
                 currentRecord.setChain(new ArrayList<>(12));
@@ -146,7 +147,7 @@ public class SessionService {
             final var currentChainRecord = chainRecords.get(chain.size() - 1);
             var currentChain = chain.get(chain.size() - 1);
 
-            if (chain.size() == 1 && CollectionUtils.isEmpty(currentChain)) {
+            if (CollectionUtils.isEmpty(currentChain)) {
                 currentChain = new LinkedList<>();
                 currentChain.add(input.getPlayersName());
                 currentChainRecord.setChain(currentChain);
@@ -160,19 +161,17 @@ public class SessionService {
                 if (checkChain(chain, currentChain, input.getPlayersName())) {
 
                     currentChain.add(input.getPlayersName());
+                    chainRecordRepository.save(currentChainRecord);
 
                     final RoundDTO roundDTO;
                     if (currentChain.size() == totalPlayers) {
                         roundDTO = new RoundDTO(true, MessageType.ROUND_END,
                             input.getPlayersName());
-                        currentChainRecord.setFinished(true);
                         roundDTO.setChain(chain);
                     } else {
                         roundDTO =  new RoundDTO(true, MessageType.BUTTON_PUSH,
                             input.getPlayersName());
                     }
-
-                    chainRecordRepository.save(currentChainRecord);
                     return roundDTO;
 
                 } else {

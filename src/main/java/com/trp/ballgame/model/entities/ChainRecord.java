@@ -22,10 +22,6 @@ public class ChainRecord implements Serializable {
   @CassandraType(type = CassandraType.Name.LIST, typeArguments = CassandraType.Name.VARCHAR)
   private List<String> chain;
 
-  @Column("finished")
-  @CassandraType(type = CassandraType.Name.BOOLEAN)
-  private boolean finished;
-
   @Version
   @Column("version")
   @CassandraType(type = CassandraType.Name.INT)

@@ -2,7 +2,6 @@ package com.trp.ballgame.repository;
 
 import com.trp.ballgame.model.entities.ChainPrimaryKey;
 import com.trp.ballgame.model.entities.ChainRecord;
-import com.trp.ballgame.model.entities.Session;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.cassandra.repository.CassandraRepository;
@@ -12,6 +11,11 @@ public interface ChainRecordRepository extends CassandraRepository<ChainRecord, 
 
   List<ChainRecord> findAllById_RoundId(UUID roundId);
 
-  ChainRecord findById_RoundIdAndFinished(UUID roundId, boolean finished);
+  @Query("""
+      select * from ball_game.chain_record
+        where round_id = :roundId
+        order by record_id desc
+        limit 1""")
+  ChainRecord findByLastRecord(UUID roundId);
 
 }

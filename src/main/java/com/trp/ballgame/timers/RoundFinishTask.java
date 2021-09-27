@@ -9,7 +9,6 @@ import com.trp.ballgame.repository.ChainRecordRepository;
 import com.trp.ballgame.repository.RoundRepository;
 import com.trp.ballgame.repository.SessionRepository;
 import com.trp.ballgame.services.NotificationService;
-import java.util.List;
 import java.util.TimerTask;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
