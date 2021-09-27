@@ -55,9 +55,7 @@ public class SessionService {
     public Round createRound(RoundDTO roundDTO) {
         var newRound = new Round();
 
-        final var roundPrimaryKey = new RoundPrimaryKey();
-        roundPrimaryKey.setSessionId(roundDTO.getSessionId());
-        roundPrimaryKey.setRoundId(UUID.randomUUID());
+        final var roundPrimaryKey = new RoundPrimaryKey(roundDTO.getSessionId(), UUID.randomUUID());
         newRound.setId(roundPrimaryKey);
 
         newRound = roundRepository.save(newRound);
@@ -76,9 +74,7 @@ public class SessionService {
     }
 
     private ChainRecord createChain(UUID roundId, int chainId) {
-        final var chainPrimaryKey = new ChainPrimaryKey();
-        chainPrimaryKey.setChainId(chainId);
-        chainPrimaryKey.setRoundId(roundId);
+        final var chainPrimaryKey = new ChainPrimaryKey(roundId, chainId);
 
         final var chainRecord = new ChainRecord();
         chainRecord.setId(chainPrimaryKey);
@@ -95,7 +91,7 @@ public class SessionService {
             final var currentRecord =
                 chainRecordRepository.findByLastRecord(activeRoundId);
             //cannot skip on first lap
-            if (currentRecord != null && currentRecord.getId().getChainId() != 0) {
+            if (currentRecord != null && currentRecord.getId().chainId() != 0) {
                 currentRecord.setChain(new LinkedList<>());
                 chainRecordRepository.save(currentRecord);
                 return new RoundDTO(true, MessageType.SKIP);
@@ -117,11 +113,11 @@ public class SessionService {
 
         if (activeRound == null) {
             final var round = createRound(input);
-            final var roundId = round.getId().getRoundId();
+            final var roundId = round.getId().roundId();
             createChain(roundId, 0);
             session.setActiveRoundId(roundId);
             sessionRepository.save(session);
-            scheduleRoundEnd(sessionId, round.getId().getRoundId(), totalPlayers);
+            scheduleRoundEnd(sessionId, roundId, totalPlayers);
 
             return new RoundDTO(true, MessageType.START_ROUND);
 
@@ -205,7 +201,7 @@ public class SessionService {
                                   ChainRecord currentChainRecord) {
         if (playersName.equals(chain.get(0).get(0))) {
             final var id = currentChainRecord.getId();
-            final var newChainRecord = createChain(id.getRoundId(), id.getChainId() + 1);
+            final var newChainRecord = createChain(id.roundId(), id.chainId() + 1);
             final var newChain = new LinkedList<String>();
             newChain.add(playersName);
             newChainRecord.setChain(newChain);
