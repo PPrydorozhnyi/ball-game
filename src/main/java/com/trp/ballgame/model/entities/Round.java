@@ -1,31 +1,23 @@
 package com.trp.ballgame.model.entities;
 
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
+import org.springframework.data.cassandra.core.mapping.CassandraType;
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 
-@Entity
 @Getter
 @Setter
-@Table(name = "pr_round")
-public class Round {
+@Table("game_round")
+public class Round implements Serializable {
 
-    @Id
-    @Column(name = "round_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+  @PrimaryKey
+  private RoundPrimaryKey id;
 
-    @Type(type = EntityConst.PG_JSONB_TYPE)
-    private List<List<String>> chain;
+  @Column("result")
+  @CassandraType(type = CassandraType.Name.INT)
+  private int result;
 
-    private int sessionId;
-
-    private long result;
 }

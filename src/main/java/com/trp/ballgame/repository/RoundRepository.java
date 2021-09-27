@@ -1,11 +1,15 @@
 package com.trp.ballgame.repository;
 
 import com.trp.ballgame.model.entities.Round;
+import com.trp.ballgame.model.entities.RoundPrimaryKey;
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.UUID;
+import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.stereotype.Repository;
 
-public interface RoundRepository extends JpaRepository<Round, Integer> {
+@Repository
+public interface RoundRepository extends CassandraRepository<Round, RoundPrimaryKey> {
 
-  List<Round> findAllBySessionId(Integer sessionId);
+  List<Round> findAllByIdSessionId(UUID sessionId);
 
 }

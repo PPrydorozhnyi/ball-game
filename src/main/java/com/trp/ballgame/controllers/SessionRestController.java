@@ -2,9 +2,9 @@ package com.trp.ballgame.controllers;
 
 import com.trp.ballgame.model.dto.SessionDTO;
 import com.trp.ballgame.services.SessionService;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 @RequestMapping("/configure")
 public class SessionRestController {
 
@@ -21,7 +21,7 @@ public class SessionRestController {
 
     @CrossOrigin("*")
     @PostMapping("/create")
-    public int createSession(@RequestBody SessionDTO sessionFrom){
+    public UUID createSession(@RequestBody SessionDTO sessionFrom) {
         log.info("Create session");
 
         final var session = sessionService.createSession(sessionFrom);

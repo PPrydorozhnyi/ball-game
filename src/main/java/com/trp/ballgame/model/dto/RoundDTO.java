@@ -2,13 +2,14 @@ package com.trp.ballgame.model.dto;
 
 import com.trp.ballgame.model.enums.MessageType;
 import java.util.List;
+import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 public class RoundDTO {
-    private Integer sessionId;
+    private UUID sessionId;
     private String playersName;
     private List<List<String>> chain;
     private boolean success = true;

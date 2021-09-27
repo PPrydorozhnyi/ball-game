@@ -1,7 +1,8 @@
 package com.trp.ballgame.repository;
 
 import com.trp.ballgame.model.entities.Session;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.UUID;
+import org.springframework.data.cassandra.repository.CassandraRepository;
 
-public interface SessionRepository extends JpaRepository<Session, Integer> {
+public interface SessionRepository extends CassandraRepository<Session, UUID> {
 }

@@ -1,19 +1,19 @@
 server:
   port: 8099
 spring:
-  datasource:
-    url: ${JDBC_DATABASE_URL}
-    username: ${JDBC_DATABASE_USERNAME}
-    password: ${JDBC_DATABASE_PASSWORD}
-  jpa:
-    database: POSTGRESQL
-    open-in-view: false
-    hibernate:
-      ddl-auto: validate
-      naming.physical-strategy: com.vladmihalcea.hibernate.type.util.CamelCaseToSnakeCaseNamingStrategy
-    properties:
-      jdbc:
-        lob:
-          non_contextual_creation: true
-      hibernate:
-        enable_lazy_load_no_trans: true
+  data:
+    cassandra:
+      keyspace-name: ${ASTRA_DB_KEYSPACE}
+      username: ${ASTRA_DB_USERNAME}
+      password: ${ASTRA_DB_PASSWORD}
+      # Create the schema on the fly if it doesn't exist
+      schema-action: create_if_not_exists
+      # Increase timeouts when connecting to Astra from a dev workstation
+      request:
+        timeout: 10s
+      connection:
+        connect-timeout: 10s
+        init-query-timeout: 10s
+
+datastax.astra:
+  secure-connect-bundle: ${ASTRA_DB_BUNDLE}
