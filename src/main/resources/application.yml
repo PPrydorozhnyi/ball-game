@@ -6,8 +6,6 @@ spring:
       keyspace-name: ${ASTRA_DB_KEYSPACE}
       username: ${ASTRA_DB_USERNAME}
       password: ${ASTRA_DB_PASSWORD}
-      # Create the schema on the fly if it doesn't exist
-      schema-action: create_if_not_exists
       # Increase timeouts when connecting to Astra from a dev workstation
       request:
         timeout: 10s
