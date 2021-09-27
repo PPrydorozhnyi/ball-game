@@ -154,7 +154,9 @@ function sendRest() {
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
-        document.getElementById("output").innerHTML += this.responseText;
+        if (xhttp.readyState === 4) {
+            document.getElementById("output").innerHTML += this.responseText;
+        }
     };
     xhttp.open("POST", "http://localhost:8099/configure/create", true);
     xhttp.setRequestHeader("Content-type", "application/json");
