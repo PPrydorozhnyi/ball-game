@@ -14,8 +14,7 @@ public interface ChainRecordRepository extends CassandraRepository<ChainRecord, 
   @Query("""
       select * from ball_game.chain_record
         where round_id = :roundId
-        order by record_id desc
         limit 1""")
-  ChainRecord findByLastRecord(UUID roundId);
+  ChainRecord findLastRecord(UUID roundId);
 
 }

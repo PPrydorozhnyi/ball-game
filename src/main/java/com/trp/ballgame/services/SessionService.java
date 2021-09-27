@@ -89,7 +89,7 @@ public class SessionService {
 
         if (activeRoundId != null) {
             final var currentRecord =
-                chainRecordRepository.findByLastRecord(activeRoundId);
+                chainRecordRepository.findLastRecord(activeRoundId);
             //cannot skip on first lap
             if (currentRecord != null && currentRecord.getId().chainId() != 0) {
                 currentRecord.setChain(new LinkedList<>());
