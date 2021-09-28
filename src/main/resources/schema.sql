@@ -10,6 +10,7 @@ CREATE TABLE ball_game.game_round
 (
     session_id uuid,
     round_id   uuid,
+    estimated  int,
     result     int,
     PRIMARY KEY (session_id, round_id)
 ) WITH CLUSTERING ORDER BY (round_id DESC);

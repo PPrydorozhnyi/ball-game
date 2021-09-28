@@ -16,6 +16,8 @@ public class Round implements Serializable {
   @PrimaryKey
   private RoundPrimaryKey id;
 
+  private int estimated;
+
   @Column("result")
   @CassandraType(type = CassandraType.Name.INT)
   private int result;

@@ -13,6 +13,7 @@ import com.trp.ballgame.services.NotificationService;
 import java.util.TimerTask;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 @RequiredArgsConstructor
 public class RoundFinishTask extends TimerTask {
@@ -34,7 +35,7 @@ public class RoundFinishTask extends TimerTask {
         .toList();
 
     final var count = allChains.stream()
-        .filter(chain -> chain.size() == totalPlayers)
+        .filter(chain -> !CollectionUtils.isEmpty(chain) && chain.size() == totalPlayers)
         .count();
 
     final var roundDTO = new RoundDTO();

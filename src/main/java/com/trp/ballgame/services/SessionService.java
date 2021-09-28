@@ -52,11 +52,12 @@ public class SessionService {
             .orElseThrow(() -> new RuntimeException("Cannot find session " + sessionId));
     }
 
-    public Round createRound(RoundDTO roundDTO) {
+    public Round createRound(RoundDTO roundDTO, int estimate) {
         var newRound = new Round();
 
         final var roundPrimaryKey = new RoundPrimaryKey(roundDTO.getSessionId(), UUID.randomUUID());
         newRound.setId(roundPrimaryKey);
+        newRound.setEstimated(estimate);
 
         newRound = roundRepository.save(newRound);
 
@@ -112,7 +113,7 @@ public class SessionService {
         final var activeRound = session.getActiveRoundId();
 
         if (activeRound == null) {
-            final var round = createRound(input);
+            final var round = createRound(input, session.getEstimated());
             final var roundId = round.getId().roundId();
             createChain(roundId, 0);
             session.setActiveRoundId(roundId);

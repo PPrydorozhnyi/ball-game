@@ -12,4 +12,5 @@ public class InitDto {
   private List<String> players;
   private int chainNumber;
   private int estimate;
+  private TotalResult totalResult;
 }

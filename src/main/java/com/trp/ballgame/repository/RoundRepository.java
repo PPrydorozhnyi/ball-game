@@ -1,5 +1,6 @@
 package com.trp.ballgame.repository;
 
+import com.trp.ballgame.model.dto.TotalResult;
 import com.trp.ballgame.model.entities.Round;
 import com.trp.ballgame.model.entities.RoundPrimaryKey;
 import java.util.List;
@@ -18,5 +19,11 @@ public interface RoundRepository extends CassandraRepository<Round, RoundPrimary
         where session_id = :sessionId
         and round_id = :roundId""")
   void setResult(UUID sessionId, UUID roundId, int result);
+
+  @Query("""
+      select sum(estimated) as estimated, sum(result) as result
+      from game_round
+      where session_id = :sessionId""")
+  TotalResult getTotalResult(UUID sessionId);
 
 }

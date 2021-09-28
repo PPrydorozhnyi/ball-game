@@ -1,6 +1,7 @@
 package com.trp.ballgame.services;
 
 import com.trp.ballgame.model.dto.InitDto;
+import com.trp.ballgame.model.dto.TotalResult;
 import com.trp.ballgame.model.entities.ChainRecord;
 import com.trp.ballgame.model.entities.Round;
 import com.trp.ballgame.repository.ChainRecordRepository;
@@ -34,12 +35,15 @@ public class InitService {
 
     initDto.setPlayers(session.getPlayers());
 
+    //todo remove
     final var totalPasses = roundRepository.findAllByIdSessionId(sessionId).stream()
         .map(Round::getResult)
         .toList();
 
+    final var totalResult = roundRepository.getTotalResult(sessionId);
     initDto.setTotalPasses(totalPasses);
     initDto.setEstimate(session.getEstimated());
+    initDto.setTotalResult(totalResult);
     return initDto;
   }
 
