@@ -1,6 +1,7 @@
 package com.trp.ballgame.controllers;
 
 import com.trp.ballgame.model.dto.SessionDTO;
+import com.trp.ballgame.model.dto.SessionEstimateDTO;
 import com.trp.ballgame.services.SessionService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,20 @@ public class SessionRestController {
         log.info("Session created with id {}", sessionId);
 
         return sessionId;
+    }
+
+    @CrossOrigin("*")
+    @PostMapping("/estimate")
+    public void changeSessionEstimate(@RequestBody SessionEstimateDTO sessionEstimateDTO){
+        log.info("Change estimate");
+
+        var session = sessionService.getSessionById(sessionEstimateDTO.sessionId());
+        if (!session.getPassword().equals(sessionEstimateDTO.password())){
+            throw new RuntimeException("Incorrect password");
+        }
+
+        sessionService.updateEstimated(sessionEstimateDTO.sessionId(), sessionEstimateDTO.estimated());
+
+        log.info("Session estimate changed to {}", sessionEstimateDTO.estimated());
     }
 }

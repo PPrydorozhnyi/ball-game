@@ -14,7 +14,7 @@
 <h1 style="padding-left: 0%; text-align: center; color: #1f3e54;">BALL GAME</h1><br>
 <div id="main-content" class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <form class="form-inline">
                 <div class="form-group">
                     <label for="sessionId">Session id:</label>
@@ -23,12 +23,22 @@
                     <input style="margin-bottom: 5px;" type="password" id="password" class="form-control"
                            placeholder="Password">
                     <button id="connect" class="gradient-button" type="submit">Connect</button>
-                    <button id="disconnect" class="gradient-button" type="submit" disabled="disabled">Disconnect
-                    </button>
+                    <button id="disconnect" class="gradient-button" type="submit" disabled="disabled">Disconnect</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-5">
+                <div class="form-group">
+                    <label for="sessionId">Estimate:</label>
+                    <input id="estimate" type="number" size="40" name="estimate" required>
+                    <button id="changeEstimate" class="gradient-button">Submit</button>
+                </div>
+        </div>
+    </div>
+
     <div class="divPoints">
         <p id="points">Values:</p>
         <p id="est">

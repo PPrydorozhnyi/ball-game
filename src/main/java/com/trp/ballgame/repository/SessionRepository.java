@@ -13,4 +13,7 @@ public interface SessionRepository extends CassandraRepository<Session, UUID> {
   @Query("select password from session where id = :sessionId")
   String getSessionPassword(UUID sessionId);
 
+  @Query("update session set estimated = :estimated where id = :sessionId")
+  void updateEstimated(UUID sessionId, int estimated);
+
 }
