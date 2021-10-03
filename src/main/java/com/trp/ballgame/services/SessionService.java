@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -40,11 +41,20 @@ public class SessionService {
         final var newSession = new Session();
         newSession.setId(UUID.randomUUID());
         final var players = session.players().stream()
-            .filter(name -> !ObjectUtils.isEmpty(name))
+            .filter(StringUtils::hasText)
             .toList();
         newSession.setPlayers(players);
         newSession.setEstimated(session.estimated());
+        newSession.setPassword(session.password());
         return sessionRepository.save(newSession);
+    }
+
+    public RoundDTO startRetrospective(RoundDTO roundDTO) {
+        final var sessionPassword = sessionRepository.getSessionPassword(roundDTO.getSessionId());
+        if (!sessionPassword.equals(roundDTO.getPassword())) {
+            roundDTO.setSuccess(false);
+        }
+        return roundDTO;
     }
 
     public Session getSessionById(UUID sessionId) {
@@ -109,6 +119,9 @@ public class SessionService {
     public RoundDTO startRound(RoundDTO input) {
         final var sessionId = input.getSessionId();
         final var session = getSessionById(sessionId);
+        if (!session.getPassword().equals(input.getPassword())) {
+            return new RoundDTO(false, MessageType.START_ROUND);
+        }
         int totalPlayers = session.getPlayers().size();
         final var activeRound = session.getActiveRoundId();
 

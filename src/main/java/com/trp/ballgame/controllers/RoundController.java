@@ -45,8 +45,10 @@ public class RoundController {
 				final var currentRound = sessionService.gamePlay(roundDTO);
 				notificationService.send(currentRound, roundDTO.getSessionId());
 			}
-			case RETROSPECTIVE -> notificationService.send(roundDTO,
-					roundDTO.getSessionId());
+			case RETROSPECTIVE ->  {
+				final var retrospective = sessionService.startRetrospective(roundDTO);
+				notificationService.send(retrospective, roundDTO.getSessionId());
+			}
 			default -> log.warn("Unexpected type");
 		}
 	}

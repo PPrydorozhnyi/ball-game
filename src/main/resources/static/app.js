@@ -6,6 +6,7 @@ var playerList = [];
 var k = 0;
 var totalWaste = 0;
 var totalEstimate = 0;
+var password;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -21,6 +22,7 @@ function setConnected(connected) {
 
 
 function connect() {
+    password = $("#password").val();
     var socket = new SockJS('/ball-game');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
@@ -87,7 +89,11 @@ function connect() {
                     document.getElementById("log").innerHTML += '<br/>' + 'Error: ' + body.message + '<br/>';
                     break;
                 case 'RETROSPECTIVE':
-                    startTimerP();
+                    if (body.success) {
+                        startTimerP();
+                    } else {
+                        document.getElementById("log").innerHTML += '<br/>' + 'No rights for starting retrospective' + '<br/>';
+                    }
                     break;
                 default:
                     showGreeting(body);
@@ -158,12 +164,12 @@ function sendRest() {
             document.getElementById("output").innerHTML += this.responseText;
         }
     };
-    xhttp.open("POST", "http://localhost:8099/configure/create", true);
+    xhttp.open("POST", "/configure/create", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify({'players': [$("#name1").val(), $("#name2").val(), $("#name3").val(),
             $("#name4").val(), $("#name5").val(), $("#name6").val(), $("#name7").val(), $("#name8").val(),
             $("#name9").val(), $("#name10").val(), $("#name11").val(), $("#name12").val()],
-        'estimated': $("#estimate").val()}));
+        'estimated': $("#estimate").val(), 'password': $("#password").val()}));
     //console.log(xhttp); https://ball-game-petro-yarik-vadim.herokuapp.com/configure/create
 }
 
@@ -214,11 +220,11 @@ function createTable() {
 }
 
 function startRound() {
-    var startRound = {'type': 'START_ROUND', 'sessionId': sessionId};
+    var startRound = {'type': 'START_ROUND', 'sessionId': sessionId, 'password': password};
     send(startRound);
 }
 
 function startRetrospective() {
-    var startRound = {'type': 'RETROSPECTIVE', 'sessionId': sessionId};
+    var startRound = {'type': 'RETROSPECTIVE', 'sessionId': sessionId, 'password': password};
     send(startRound);
 }

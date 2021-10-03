@@ -10,4 +10,7 @@ public interface SessionRepository extends CassandraRepository<Session, UUID> {
   @Query("update session set active_round_id = null where id = :sessionId")
   void setActiveRoundToNull(UUID sessionId);
 
+  @Query("select password from session where id = :sessionId")
+  String getSessionPassword(UUID sessionId);
+
 }

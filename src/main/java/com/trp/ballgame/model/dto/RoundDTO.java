@@ -15,6 +15,7 @@ public class RoundDTO {
     private boolean success = true;
     private MessageType type;
     private long totalPasses;
+    private String password;
 
     public RoundDTO(boolean success, MessageType type){
         this.success = success;

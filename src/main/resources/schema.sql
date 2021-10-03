@@ -3,7 +3,8 @@ CREATE TABLE ball_game.session
     id              uuid PRIMARY KEY,
     active_round_id uuid,
     estimated       int,
-    players         list<text>
+    players         list<text>,
+    password        text
 );
 
 CREATE TABLE ball_game.game_round

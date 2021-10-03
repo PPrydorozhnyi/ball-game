@@ -25,4 +25,6 @@ public class Session implements Serializable {
 
   @Column("active_round_id")
   private UUID activeRoundId;
+
+  private String password;
 }
