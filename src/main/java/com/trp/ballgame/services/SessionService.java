@@ -25,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -159,24 +158,27 @@ public class SessionService {
         final var chain = chainRecords.stream()
             .map(ChainRecord::getChain)
             .toList();
-        final var currentChainRecord = chainRecords.get(chain.size() - 1);
-        var currentChain = chain.get(chain.size() - 1);
+        final var currentChainRecord = chainRecords.get(0);
+        var currentChain = chain.get(0);
 
         final RoundDTO roundDTO;
         if (CollectionUtils.isEmpty(currentChain)) {
-            roundDTO = addToClearedOrNewlyCreatedChain(currentChainRecord, playersName);
+            roundDTO = addToClearedOrNewlyCreatedChain(currentChainRecord, playersName, chain);
         } else if (currentChain.size() < totalPlayers) {
             roundDTO = addToExistingChain(playersName, chain, currentChainRecord, currentChain,
                 totalPlayers);
         } else {
-            roundDTO = createNewLap(playersName, chain, currentChainRecord);
+            roundDTO = createNewLap(playersName, currentChainRecord);
         }
 
         return roundDTO;
     }
 
     private RoundDTO addToClearedOrNewlyCreatedChain(ChainRecord currentChainRecord,
-                                                     String playersName) {
+                                                     String playersName, List<List<String>> chain) {
+        if (chain.size() != 1 && !playersName.equals(chain.get(1).get(0))) {
+            return new RoundDTO(false, MessageType.BUTTON_PUSH, playersName);
+        }
         final var currentChain = new LinkedList<String>();
         currentChain.add(playersName);
         currentChainRecord.setChain(currentChain);
@@ -211,9 +213,8 @@ public class SessionService {
         }
     }
 
-    private RoundDTO createNewLap(String playersName, List<List<String>> chain,
-                                  ChainRecord currentChainRecord) {
-        if (playersName.equals(chain.get(0).get(0))) {
+    private RoundDTO createNewLap(String playersName, ChainRecord currentChainRecord) {
+        if (playersName.equals(currentChainRecord.getChain().get(0))) {
             final var id = currentChainRecord.getId();
             final var newChainRecord = createChain(id.roundId(), id.chainId() + 1);
             final var newChain = new LinkedList<String>();
@@ -222,11 +223,9 @@ public class SessionService {
             // todo test save in concurrency
             chainRecordRepository.save(newChainRecord);
 
-            return new RoundDTO(true, MessageType.BUTTON_PUSH,
-                playersName);
+            return new RoundDTO(true, MessageType.BUTTON_PUSH, playersName);
         } else {
-            return new RoundDTO(false, MessageType.BUTTON_PUSH,
-                playersName);
+            return new RoundDTO(false, MessageType.BUTTON_PUSH, playersName);
         }
     }
 
