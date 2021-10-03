@@ -7,6 +7,7 @@ import com.trp.ballgame.model.entities.Round;
 import com.trp.ballgame.repository.ChainRecordRepository;
 import com.trp.ballgame.repository.RoundRepository;
 import com.trp.ballgame.repository.SessionRepository;
+import java.util.Collections;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,10 +36,8 @@ public class InitService {
 
     initDto.setPlayers(session.getPlayers());
 
-    //todo remove
-    final var totalPasses = roundRepository.findAllByIdSessionId(sessionId).stream()
-        .map(Round::getResult)
-        .toList();
+    final var totalPasses = roundRepository.findAllByIdSessionId(sessionId);
+    Collections.reverse(totalPasses);
 
     final var totalResult = roundRepository.getTotalResult(sessionId);
     initDto.setTotalPasses(totalPasses);

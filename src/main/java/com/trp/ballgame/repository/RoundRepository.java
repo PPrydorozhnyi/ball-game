@@ -12,7 +12,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoundRepository extends CassandraRepository<Round, RoundPrimaryKey> {
 
-  List<Round> findAllByIdSessionId(UUID sessionId);
+  @Query("select result from game_round limit 3")
+  List<Integer> findAllByIdSessionId(UUID sessionId);
 
   @Query("""
       update game_round set result = :result
