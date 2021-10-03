@@ -74,6 +74,10 @@ public class SessionService {
         return newRound;
     }
 
+    public void updateEstimated(UUID sessionId, int estimated){
+        sessionRepository.updateEstimated(sessionId, estimated);
+    }
+
     private void scheduleRoundEnd(UUID sessionId, UUID roundId, int totalPlayers) {
         final var roundTimer =
             new RoundFinishTask(sessionRepository, notificationService, roundRepository,

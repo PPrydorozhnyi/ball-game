@@ -104,6 +104,28 @@ function connect() {
     });
 }
 
+function changeEstimate(){
+    estimate = $("#estimate").val();
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState === 4) {
+            if (xhttp.status === 200) {
+                document.getElementById("est").innerHTML = 'Estimate: ' + '<b>' + estimate + '</b>';
+            }
+            else{
+                alert(xhttp.responseText);
+            }
+        }
+    };
+    xhttp.open("POST", "http://localhost:8099/configure/estimate", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify({
+                        'sessionId': sessionId,
+                        'password' : password,
+                        'estimated': estimate}));
+}
+
 function clearLog() {
     document.getElementById("log").innerHTML = '<b>Log:</b><br/>';
 }
@@ -147,6 +169,7 @@ $(function () {
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });
     $( "#sendRest" ).click(function() { sendRest(); });
+    $( "#changeEstimate" ).click(function() { changeEstimate(); });
 });
 
 function skip() {
